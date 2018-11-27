@@ -1,0 +1,37 @@
+{
+  "name": "communibee-backend",
+  "homepage": "https://github.com/BumbleB-3339/CommuniBee-Back-End",
+  "description": "The CommuniBee project server.",
+  "bugs": {
+    "url": "https://github.com/BumbleB-3339/CommuniBee-Back-End/issues/new"
+  },
+  "keywords": [
+    "koa",
+    "koa2",
+    "api",
+    "es6"
+  ],
+  "repository": "https://github.com/BumbleB-3339/CommuniBee-Back-End.git",
+  "author": "Ofek@IAF",
+  "license": "MIT",
+  "version": "1.2.2",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index",
+    "start": "cross-env NODE_ENVIRONMENT=production node index"
+  },
+  "dependencies": {
+    "@koa/cors": "^2.2.2",
+    "cross-env": "^5.2.0",
+    "dotenv": "^6.0.0",
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-helmet": "^4.0.0",
+    "koa-logger": "^3.2.0",
+    "koa-respond": "^1.0.1",
+    "koa-router": "^7.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
