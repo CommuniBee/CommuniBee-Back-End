@@ -15,7 +15,7 @@ app.use(
   koaSwagger({
     routePrefix: '/swagger', // host at /swagger instead of default /docs
     swaggerOptions: {
-      url: 'http://petstore.swagger.io/v2/swagger.json', // example path to json
+      url: 'http://localhost:3000/api-specs.json', // example path to json
     },
   }),
 );
