@@ -31,7 +31,8 @@
     "koa-respond": "^1.0.1",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
-    "koa2-swagger-ui": "^2.11.6"
+    "koa2-swagger-ui": "^2.11.6",
+    "mongoose": "^5.3.14"
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
