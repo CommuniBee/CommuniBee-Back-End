@@ -15,7 +15,7 @@ app.use(
   koaSwagger({
     routePrefix: '/swagger', // host at /swagger instead of default /docs
     swaggerOptions: {
-      url: 'http://localhost:3000/api-specs.json' // example path to json
+      url: 'http://localhost:3000/api-specs.json', // example path to json
     },
   }),
 );
@@ -31,17 +31,18 @@ app.use(BodyParser({
   enableTypes: ['json'],
   jsonLimit: '5mb',
   strict: true,
-  onerror: function (err, ctx) {
+  onerror(err, ctx) {
     ctx.throw('body parse error', 422);
   },
 }));
 
 app.use(respond());
 
-app.use(serve(__dirname + '/public'));
+app.use(serve(`${__dirname}/public`));
 
 // API routes
 require('./routes')(router);
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 
