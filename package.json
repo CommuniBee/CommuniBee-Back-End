@@ -1,9 +1,9 @@
 {
   "name": "communibee-backend",
-  "homepage": "https://github.com/BumbleB-3339/CommuniBee-Back-End",
-  "description": "The CommuniBee project server.",
+  "homepage": "https://github.com/CommuniBee/CommuniBee-Back-End",
+  "description": "The CommuniBee project server",
   "bugs": {
-    "url": "https://github.com/BumbleB-3339/CommuniBee-Back-End/issues/new"
+    "url": "https://github.com/CommuniBee/CommuniBee-Back-End/issues/new"
   },
   "keywords": [
     "koa",
@@ -11,14 +11,14 @@
     "api",
     "es6"
   ],
-  "repository": "https://github.com/BumbleB-3339/CommuniBee-Back-End.git",
-  "author": "Ofek@IAF",
+  "repository": "https://github.com/CommuniBee/CommuniBee-Back-End.git",
   "license": "MIT",
   "version": "1.2.2",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index",
-    "start": "cross-env NODE_ENVIRONMENT=production node index"
+    "start": "cross-env NODE_ENVIRONMENT=production node index",
+    "lint": "node_modules/.bin/eslint ."
   },
   "dependencies": {
     "@koa/cors": "^2.2.2",
@@ -34,6 +34,9 @@
     "koa2-swagger-ui": "^2.11.6"
   },
   "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "nodemon": "^1.18.4"
   }
 }
