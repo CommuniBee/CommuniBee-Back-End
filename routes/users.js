@@ -1,7 +1,8 @@
-const Router = require('koa-router')
-const router = new Router()
-const Ctrl = require('../controllers/users')
+const Router = require('koa-router');
 
-router.get('/', Ctrl.hello)
+const router = new Router();
+const Ctrl = require('../controllers/users');
 
-module.exports = router.routes()
+router.get('/', Ctrl.hello);
+
+module.exports = router.routes();
