@@ -1,14 +1,7 @@
 
-/*!
- * Module dependencies
- */
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-/**
- * ContentSchema schema
- */
-var ContentSchema = new Schema({
+var contentSchema = new mongoose.Schema({
   files: {
     type: [String],
     requried: true
@@ -17,40 +10,22 @@ var ContentSchema = new Schema({
     type: String,
     required: true
   },
-  category: String,
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category'
+  },
   tags: {
     type: [String],
     default: []
   }
 });
 
-/**
- * Add plugins
- */
-
-
-/**
- * Add your
- * - pre-save hooks
- * - validations
- * - virtuals
- */
-
-/**
- * Methods
- */
-ContentSchema.method({
+contentSchema.method({
 
 });
 
-/**
- * Statics
- */
-ContentSchema.static({
+contentSchema.static({
 
 });
 
-/**
- * Register
- */
-mongoose.model('Content', ContentSchema);
+mongoose.model('Content', contentSchema);

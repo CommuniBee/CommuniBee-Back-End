@@ -1,14 +1,6 @@
-
-/*!
- * Module dependencies
- */
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-/**
- * VolunteeringEvent schema
- */
-var VolunteeringEventSchema = new Schema({
+var volunteeringEventSchema = new mongoose.Schema({
   request: {
     type: Schema.Types.ObjectId,
     ref: 'VolunteeringRequest'
@@ -32,33 +24,12 @@ var VolunteeringEventSchema = new Schema({
   }
 });
 
-/**
- * Add plugins
- */
-
-
-/**
- * Add your
- * - pre-save hooks
- * - validations
- * - virtuals
- */
-
-/**
- * Methods
- */
-VolunteeringEventSchema.method({
+volunteeringEventSchema.method({
 
 });
 
-/**
- * Statics
- */
-VolunteeringEventSchema.static({
+volunteeringEventSchema.static({
 
 });
 
-/**
- * Register
- */
-mongoose.model('VolunteeringEvent', VolunteeringEventSchema);
+mongoose.model('VolunteeringEvent', volunteeringEventSchema);
