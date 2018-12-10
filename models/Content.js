@@ -1,31 +1,28 @@
+const mongoose = require('mongoose');
 
-var mongoose = require('mongoose');
-
-var contentSchema = new mongoose.Schema({
+const contentSchema = new mongoose.Schema({
   files: {
     type: [String],
-    requried: true
+    required: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   category: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
   },
   tags: {
     type: [String],
-    default: []
-  }
+    default: [],
+  },
 });
 
 contentSchema.method({
-
 });
 
 contentSchema.static({
-
 });
 
-mongoose.model('Content', contentSchema);
+module.exports = mongoose.model('Content', contentSchema);

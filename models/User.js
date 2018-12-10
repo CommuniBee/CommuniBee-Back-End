@@ -1,54 +1,22 @@
+const mongoose = require('mongoose');
 
-/*!
- * Module dependencies
- */
-
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-/**
- * User schema
- */
-var UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   role: {
     type: [{
-      type: String
+      type: String,
     }],
-    default: ['User']
-  }
+    default: ['User'],
+  },
 });
 
-/**
- * Add plugins
- */
-
-
-/**
- * Add your
- * - pre-save hooks
- * - validations
- * - virtuals
- */
-
-/**
- * Methods
- */
 UserSchema.method({
-
 });
 
-/**
- * Statics
- */
 UserSchema.static({
-
 });
 
-/**
- * Register
- */
-mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

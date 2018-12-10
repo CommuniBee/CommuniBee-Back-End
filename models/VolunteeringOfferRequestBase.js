@@ -49,5 +49,4 @@ volunteeringOfferRequestBaseSchema.method({
 volunteeringOfferRequestBaseSchema.static({
 });
 
-const VolunteeringOfferRequestBase = mongoose.model('VolunteeringOfferRequestBase', volunteeringOfferRequestBaseSchema);
-module.exports = VolunteeringOfferRequestBase;
+module.exports = mongoose.model('VolunteeringOfferRequestBase', volunteeringOfferRequestBaseSchema);

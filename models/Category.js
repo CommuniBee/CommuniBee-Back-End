@@ -1,19 +1,16 @@
+const mongoose = require('mongoose');
 
-var mongoose = require('mongoose');
-
-var categorySchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
   displayName: {
     type: String,
-    requried: true
-  }
+    required: true,
+  },
 });
 
 categorySchema.method({
-
 });
 
 categorySchema.static({
-
 });
 
-mongoose.model('Category', categorySchema);
+module.exports = mongoose.model('Category', categorySchema);

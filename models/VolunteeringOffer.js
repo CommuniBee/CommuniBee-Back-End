@@ -6,7 +6,7 @@ const volunteeringOfferSchema = new mongoose.Schema({
   location: {
     type: String,
     enum: regions.getRegions(),
-    required: true
+    required: true,
   },
 });
 
@@ -16,5 +16,4 @@ volunteeringOfferSchema.method({
 volunteeringOfferSchema.static({
 });
 
-const VolunteeringOffer = VolunteeringOfferRequestBase.discriminator('VolunteeringOffer', volunteeringOfferSchema);
-module.exports = VolunteeringOffer;
+module.exports = VolunteeringOfferRequestBase.discriminator('VolunteeringOffer', volunteeringOfferSchema);
