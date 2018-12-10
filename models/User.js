@@ -10,7 +10,16 @@ var Schema = mongoose.Schema;
  * User schema
  */
 var UserSchema = new Schema({
-
+  name: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: [{
+      type: String
+    }],
+    default: ['User']
+  }
 });
 
 /**
