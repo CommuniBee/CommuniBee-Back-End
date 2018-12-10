@@ -1,99 +1,20 @@
+const mongoose = require('mongoose');
+const regions = require('../common/regions');
+const VolunteeringOfferRequestBase = require('./VolunteeringOfferRequestBase');
 
-/*!
- * Module dependencies
- */
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-/**
- * VolunteeringOffer schema
- */
-var VolunteeringOfferSchema = new Schema({
+const volunteeringOfferSchema = new mongoose.Schema({
   location: {
-    type: {
-      lat: Number,
-      lon: Number
-    },
-    required: true
+    type: String,
+    enum: regions.getRegions(),
+    required: true,
   },
-  volunteersOffered: {
-    type: Number,
-    required: true
-  },
-  occurrences: {
-    type: Number,
-    required: true
-  },
-  contact: {
-    name:{
-      type: String,
-      required: true
-    },
-    phone:{
-      type: String,
-      required: true
-    },
-    email:{
-      type: String,
-      required: true
-    }
-  },
-  dateRange: {
-    type: {
-      from: Date,
-      to: Date
-    },
-    required: true
-  },
-  availableDays: {
-    type: [Number],
-    required: true
-  },
-  timeRange:  {
-    type: {
-      from: Date,
-      to: Date
-    },
-    required: true
-  },
-  notes: {
-    type: [String],
-    default: []
-  },
-  content: {
-    type: Schema.Types.ObjectId,
-    ref: 'Content'
-  }
-
 });
 
-/**
- * Add plugins
- */
-
-
-/**
- * Add your
- * - pre-save hooks
- * - validations
- * - virtuals
- */
-
-/**
- * Methods
- */
-VolunteeringOfferSchema.method({
-
+volunteeringOfferSchema.method({
 });
 
-/**
- * Statics
- */
-VolunteeringOfferSchema.static({
-
+volunteeringOfferSchema.static({
 });
 
-/**
- * Register
- */
-mongoose.model('VolunteeringOffer', VolunteeringOfferSchema);
+const VolunteeringOffer = VolunteeringOfferRequestBase.discriminator('VolunteeringOffer', volunteeringOfferSchema);
+module.exports = VolunteeringOffer;
