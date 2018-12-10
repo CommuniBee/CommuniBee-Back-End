@@ -6,7 +6,7 @@ const volunteeringOfferSchema = new mongoose.Schema({
   location: {
     type: String,
     enum: regions.getRegions(),
-    required: true,
+    required: true
   },
 });
 
