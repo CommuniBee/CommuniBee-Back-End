@@ -18,5 +18,4 @@ volunteeringRequestSchema.method({
 volunteeringRequestSchema.static({
 });
 
-const VolunteeringRequest = VolunteeringOfferRequestBase.discriminator('VolunteeringRequest', volunteeringRequestSchema);
-module.exports = VolunteeringRequest;
+module.exports = VolunteeringOfferRequestBase.discriminator('VolunteeringRequest', volunteeringRequestSchema);
