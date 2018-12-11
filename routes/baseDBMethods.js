@@ -32,7 +32,7 @@ async function update(ctx, Model) {
     const updatedDoc = await Model.findOneAndUpdate({ _id: ctx.params.id },
       { $set: ctx.request.body },
       { new: true });
-    ctx.ok(updatedDoc);  
+    ctx.ok(updatedDoc);
   } catch (error) {
     ctx.internalServerError();
   }
@@ -42,7 +42,7 @@ async function remove(ctx, Model) {
   try {
     const removedDoc = await Model.findOneAndRemove({ _id: ctx.params.id });
     ctx.ok(removedDoc);
-    console.log("deleted")
+    console.log('deleted');
   } catch (error) {
     ctx.internalServerError();
   }
