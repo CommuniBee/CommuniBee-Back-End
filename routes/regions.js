@@ -7,5 +7,4 @@ router.get('/', (ctx) => {
   ctx.ok(regions.getRegions());
 });
 
-
 module.exports = router.routes();
