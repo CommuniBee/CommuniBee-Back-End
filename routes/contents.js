@@ -9,6 +9,12 @@ router.get('/', async (ctx) => {
     })
     .post('/', async (ctx) => {
         await DBMethods.create(ctx, Content);
+    })
+    .put('/', async (ctx) => {
+        await DBMethods.update(ctx, Content);
+    })
+    .delete('/', async (ctx) => {
+        await DBMethods.remove(ctx, Content);
     });
 
 module.exports = router.routes();

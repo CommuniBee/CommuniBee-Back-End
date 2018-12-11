@@ -12,7 +12,7 @@ async function create(ctx, model) {
 
     try {
         await document.save({
-            validateBeforeSave: true,
+            validateBeforeSave: false,
         });
         ctx.ok(document);
     } catch (err) {
@@ -25,12 +25,22 @@ async function create(ctx, model) {
     }
 }
 
-async function update() {
-
+async function update(ctx, model) {
+    try {
+        var updatedDoc = await model.findOneAndUpdate({'_id': ctx.request.body._id }, { $set: ctx.request.body }, { new: true });
+        ctx.ok(updatedDoc);
+    } catch (error) {
+        ctx.internalServerError();
+    }
 }
 
-async function remove() {
-
+async function remove(ctx, model) {
+    try {
+        var removedDoc = await model.findOneAndDelete({'_id': ctx.request.body._id });
+        ctx.ok(removedDoc);
+    } catch (error) {
+        ctx.internalServerError();
+    }
 }
 
 module.exports = {
