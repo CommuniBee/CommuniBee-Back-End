@@ -29,10 +29,10 @@ async function create(ctx, Model) {
 
 async function update(ctx, Model) {
   try {
-    const updatedDoc = await Model.findOneAndUpdate({ _id: ctx.request.body._id },
+    const updatedDoc = await Model.findOneAndUpdate({ _id: ctx.params.id },
       { $set: ctx.request.body },
       { new: true });
-    ctx.ok(updatedDoc);
+    ctx.ok(updatedDoc);  
   } catch (error) {
     ctx.internalServerError();
   }
@@ -40,8 +40,9 @@ async function update(ctx, Model) {
 
 async function remove(ctx, Model) {
   try {
-    const removedDoc = await Model.findOneAndDelete({ _id: ctx.request.body._id });
+    const removedDoc = await Model.findOneAndRemove({ _id: ctx.params.id });
     ctx.ok(removedDoc);
+    console.log("deleted")
   } catch (error) {
     ctx.internalServerError();
   }

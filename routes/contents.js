@@ -7,13 +7,13 @@ const router = new Router();
 router.get('/', async (ctx) => {
   await DBMethods.list(ctx, Content);
 })
-  .post('/', async (ctx) => {
+  .post('/:id', async (ctx) => {
     await DBMethods.create(ctx, Content);
   })
-  .put('/', async (ctx) => {
+  .put('/:id', async (ctx) => {
     await DBMethods.update(ctx, Content);
   })
-  .delete('/', async (ctx) => {
+  .delete('/:id', async (ctx) => {
     await DBMethods.remove(ctx, Content);
   });
 
