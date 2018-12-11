@@ -27,14 +27,16 @@ async function create(ctx, model) {
 
 async function update(ctx, model) {
     try {
-        var updatedDoc = await model.findOneAndUpdate({'_id': ctx.request.body._id }, { $set: ctx.request.body }, { new: true });
+        var updatedDoc = await model.findOneAndUpdate({'_id': ctx.request.body._id }, 
+                                                      { $set: ctx.request.body }, 
+                                                      { new: true });
         ctx.ok(updatedDoc);
     } catch (error) {
         ctx.internalServerError();
     }
 }
 
-async function delete(ctx, model) {
+async function remove(ctx, model) {
     try {
         var removedDoc = await model.findOneAndDelete({'_id': ctx.request.body._id });
         ctx.ok(removedDoc);
