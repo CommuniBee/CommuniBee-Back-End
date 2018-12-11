@@ -3,25 +3,16 @@ const Category = require('../models/Category');
 
 const router = new Router();
 
-/*router.get('/', async (ctx) => {
-  await Category.find({}, async (err, doc) => {
-    if (err) {
-      await ctx.internalServerError();
-    }
-    await ctx.ok(doc);
-  });
-});*/
-
-router.get('/', async (ctx) => {
+const getCategories = async (ctx) => {
   try {
     const docs = await Category.find({});
     ctx.ok(docs);
   } catch (err) {
     ctx.internalServerError();
   }
-});
+};
 
-router.post('/', async (ctx) => {
+const addCategory = async (ctx) => {
   const category = Category(ctx.request.body);
 
   try {
@@ -37,6 +28,9 @@ router.post('/', async (ctx) => {
       ctx.internalServerError();
     }
   }
-});
+};
+
+router.get('/', getCategories)
+  .post('/', addCategory);
 
 module.exports = router.routes();
