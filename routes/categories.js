@@ -15,19 +15,16 @@ router.get('/', async (ctx) => {
 router.post('/', async (ctx) => {
   const category = Category(ctx.request.body);
 
-  await category.validate().then(async () => {
-    await category.save().then(async (doc) => {
-      await ctx.ok(doc);
-    }, async (saveRejectionReason) => {
-      console.error(saveRejectionReason);
-
-      await ctx.internalServerError();
-    });
-  }, async (validateRejectionReason) => {
-    console.error('Invalid document');
-    console.error(validateRejectionReason);
-
-    await ctx.badRequest('Invalid document');
+  await category.save({
+    validateBeforeSave: true,
+  }).then((doc) => {
+    ctx.ok(doc);
+  }, (saveRejectionReason) => {
+    if (saveRejectionReason.name === 'ValidationError') {
+      ctx.badRequest('Invalid document');
+    } else {
+      ctx.internalServerError();
+    }
   });
 });
 
