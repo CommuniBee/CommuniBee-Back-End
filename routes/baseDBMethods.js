@@ -34,7 +34,7 @@ async function update(ctx, model) {
     }
 }
 
-async function remove(ctx, model) {
+async function delete(ctx, model) {
     try {
         var removedDoc = await model.findOneAndDelete({'_id': ctx.request.body._id });
         ctx.ok(removedDoc);
