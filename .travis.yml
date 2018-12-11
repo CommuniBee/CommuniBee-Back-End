@@ -6,8 +6,8 @@ services:
 install: npm install
 
 stages:
-  - compile
   - test
+  - build
   - name: deploy
     if: branch = master
 
