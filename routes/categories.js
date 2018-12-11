@@ -3,13 +3,22 @@ const Category = require('../models/Category');
 
 const router = new Router();
 
-router.get('/', async (ctx) => {
-  await Category.find({}, (err, doc) => {
+/*router.get('/', async (ctx) => {
+  await Category.find({}, async (err, doc) => {
     if (err) {
-      ctx.internalServerError();
+      await ctx.internalServerError();
     }
-    ctx.ok(doc);
+    await ctx.ok(doc);
   });
+});*/
+
+router.get('/', async (ctx) => {
+  try {
+    const docs = await Category.find({});
+    ctx.ok(docs);
+  } catch (err) {
+    ctx.internalServerError();
+  }
 });
 
 router.post('/', async (ctx) => {
