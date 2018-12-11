@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 async function list(ctx, Model) {
   try {
     const docs = await Model.find({});
