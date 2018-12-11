@@ -2,7 +2,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const Logger = require('koa-logger');
 const Cors = require('@koa/cors');
-const BodyParser = require('koa-bodyparser');
+const bodyParser = require('koa-bodyparser');
 const Helmet = require('koa-helmet');
 const respond = require('koa-respond');
 const serve = require('koa-static');
@@ -27,12 +27,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(Cors());
-app.use(BodyParser({
+app.use(bodyParser({
   enableTypes: ['json'],
   jsonLimit: '5mb',
   strict: true,
-  onerror(err, ctx) {
-    ctx.throw('body parse error', 422);
+  onerror: (err, ctx) => {
+    ctx.throw('Invalid or too large JSON', 422);
   },
 }));
 
