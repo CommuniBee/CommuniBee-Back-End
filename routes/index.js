@@ -7,7 +7,6 @@ const volunteeringOffersRoutes = require('./volunteering_offers');
 const volunteeringRequestsRoutes = require('./volunteering_requests');
 
 module.exports = (router) => {
-  router.prefix('/v1');
   router.use('/categories', categoriesRoutes);
   router.use('/contents', contentsRoutes);
   router.use('/regions', regionsRoutes);
