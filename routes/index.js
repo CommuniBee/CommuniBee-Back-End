@@ -12,7 +12,7 @@ module.exports = (router) => {
   router.use('/contents', contentsRoutes);
   router.use('/regions', regionsRoutes);
   router.use('/users', usersRoutes);
-  router.use('/volunteering_events', volunteeringEventsRoutes);
-  router.use('/volunteering_offers', volunteeringOffersRoutes);
-  router.use('/volunteering_requests', volunteeringRequestsRoutes);
+  router.use('/volunteering-events', volunteeringEventsRoutes);
+  router.use('/volunteering-offers', volunteeringOffersRoutes);
+  router.use('/volunteering-requests', volunteeringRequestsRoutes);
 };
