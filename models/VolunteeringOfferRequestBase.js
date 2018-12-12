@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var options = {discriminatorKey: 'kind'};
+const options = { discriminatorKey: 'kind' };
 const volunteeringOfferRequestBaseSchema = new mongoose.Schema({
   numberOfVolunteers: {
     type: Number,
