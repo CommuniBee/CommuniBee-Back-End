@@ -4,20 +4,10 @@ const DBMethods = require('./baseDBMethods');
 
 const router = new Router();
 
-router.get('/', async (ctx) => {
-  await DBMethods.list(ctx, Content);
-})
-  .get('/:id', async (ctx) => {
-    await DBMethods.getById(ctx, Content);
-  })
-  .post('/', async (ctx) => {
-    await DBMethods.create(ctx, Content);
-  })
-  .put('/:id', async (ctx) => {
-    await DBMethods.update(ctx, Content);
-  })
-  .delete('/:id', async (ctx) => {
-    await DBMethods.remove(ctx, Content);
-  });
+router.get('/', DBMethods.list(Content))
+  .get('/:id', DBMethods.getById(Content))
+  .post('/', DBMethods.create(Content))
+  .put('/:id', DBMethods.update(Content))
+  .delete('/:id', DBMethods.remove(Content));
 
 module.exports = router.routes();
