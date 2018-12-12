@@ -12,6 +12,14 @@ function handleErrors(ctx, error) {
   }
 }
 
+function handleDocResponse(ctx, doc) {
+  if (doc === null) {
+    ctx.notFound(`Document with id ${ctx.params.id} not found`);
+  } else {
+    ctx.ok(doc);
+  }
+}
+
 async function list(ctx, Model) {
   // TODO pagination
   try {
@@ -25,11 +33,7 @@ async function list(ctx, Model) {
 async function getOne(ctx, Model) {
   try {
     const doc = await Model.findById(ctx.params.id);
-    if (doc === null) {
-      ctx.notFound(`Document with id ${ctx.params.id} not found`);
-    } else {
-      ctx.ok(doc);
-    }
+    handleDocResponse(ctx, doc);
   } catch (error) {
     handleErrors(ctx, error);
   }
@@ -53,11 +57,7 @@ async function update(ctx, Model) {
     const updatedDoc = await Model.findByIdAndUpdate(ctx.params.id,
       { $set: ctx.request.body },
       { new: true });
-    if (updatedDoc === null) {
-      ctx.notFound(`Document with id ${ctx.params.id} not found`);
-    } else {
-      ctx.ok(updatedDoc);
-    }
+    handleDocResponse(ctx, updatedDoc);
   } catch (error) {
     handleErrors(ctx, error);
   }
@@ -66,11 +66,7 @@ async function update(ctx, Model) {
 async function remove(ctx, Model) {
   try {
     const removedDoc = await Model.findByIdAndRemove(ctx.params.id);
-    if (removedDoc === null) {
-      ctx.notFound(`Document with id ${ctx.params.id} not found`);
-    } else {
-      ctx.ok(removedDoc);
-    }
+    handleDocResponse(ctx, removedDoc);
   } catch (error) {
     handleErrors(ctx, error);
   }
