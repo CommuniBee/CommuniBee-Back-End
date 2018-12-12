@@ -30,7 +30,7 @@ async function list(ctx, Model) {
   }
 }
 
-async function getOne(ctx, Model) {
+async function getById(ctx, Model) {
   try {
     const doc = await Model.findById(ctx.params.id);
     handleDocResponse(ctx, doc);
@@ -74,7 +74,7 @@ async function remove(ctx, Model) {
 
 module.exports = {
   list,
-  getOne,
+  getById,
   create,
   update,
   remove,

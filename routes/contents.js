@@ -8,7 +8,7 @@ router.get('/', async (ctx) => {
   await DBMethods.list(ctx, Content);
 })
   .get('/:id', async (ctx) => {
-    await DBMethods.getOne(ctx, Content);
+    await DBMethods.getById(ctx, Content);
   })
   .post('/', async (ctx) => {
     await DBMethods.create(ctx, Content);
