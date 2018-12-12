@@ -7,17 +7,21 @@ install: npm install
 
 stages:
   - lint
-  - build
-  - name: deploy
+  - name: build docker image
+    if: branch != master || type != push
+  - name: deploy docker image
     if: branch = master && type = push
 
 jobs:
   include:
     - stage: lint
       script: npm run lint
-    - stage: build
+
+    - stage: build docker image
       script: docker build -t communibee/communibee-back-end .
-    - stage: deploy
+
+    - stage: deploy docker image
       script:
+        - docker build -t communibee/communibee-back-end .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push communibee/communibee-back-end
