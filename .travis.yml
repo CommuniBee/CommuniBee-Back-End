@@ -1,6 +1,23 @@
 language: node_js
 node_js:
 - 10
+services:
+  - docker
 install: npm install
-script:
-- npm run lint
+
+stages:
+  - test
+  - build
+  - name: deploy
+    if: branch = master
+
+jobs:
+  include:
+    - stage: test
+      script: npm run lint
+    - stage: build
+      script: docker build -t communibee/communibee-back-end .
+    - stage: deploy
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push communibee/communibee-back-end
