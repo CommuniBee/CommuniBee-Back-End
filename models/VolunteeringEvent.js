@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const volunteeringEventSchema = new mongoose.Schema({
   request: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'VolunteeringRequest',
+    ref: 'VolunteeringOfferRequestBase',
   },
   offer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'VolunteeringOffer',
+    ref: 'VolunteeringOfferRequestBase',
   },
   date: {
     type: Date,
