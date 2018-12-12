@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 
 async function list(ctx, Model) {
+  // TODO pagination
   try {
     const docs = await Model.find({});
     ctx.ok(docs);
@@ -9,18 +10,36 @@ async function list(ctx, Model) {
   }
 }
 
+async function getOne(ctx, Model) {
+  try {
+    const doc = await Model.findById(ctx.params.id);
+    if (doc === null) {
+      ctx.notFound(`Document with id ${ctx.params.id} not found`);
+    } else {
+      ctx.ok(doc);
+    }
+  } catch (error) {
+    console.error(error);
+    if (error.name === 'ValidationError') {
+      ctx.badRequest('Invalid document');
+    } else {
+      ctx.internalServerError();
+    }
+  }
+}
+
 async function create(ctx, Model) {
-  const document = new Model(ctx.request.body);
+  const requestedDoc = new Model(ctx.request.body);
 
   try {
-    await document.save({
-      validateBeforeSave: false,
+    const savedDoc = await requestedDoc.save({
+      validateBeforeSave: true,
     });
-    ctx.ok(document);
-  } catch (err) {
-    console.error(err);
-    if (err.name === 'ValidationError') {
-      ctx.badRequest('invalid document');
+    ctx.ok(savedDoc);
+  } catch (error) {
+    console.error(error);
+    if (error.name === 'ValidationError') {
+      ctx.badRequest('Invalid document');
     } else {
       ctx.internalServerError();
     }
@@ -29,27 +48,46 @@ async function create(ctx, Model) {
 
 async function update(ctx, Model) {
   try {
-    const updatedDoc = await Model.findOneAndUpdate({ _id: ctx.params.id },
+    const updatedDoc = await Model.findByIdAndUpdate(ctx.params.id,
       { $set: ctx.request.body },
       { new: true });
-    ctx.ok(updatedDoc);
+    if (updatedDoc === null) {
+      ctx.notFound(`Document with id ${ctx.params.id} not found`);
+    } else {
+      ctx.ok(updatedDoc);
+    }
   } catch (error) {
-    ctx.internalServerError();
+    console.error(error);
+    if (error.name === 'CastError') {
+      // CastError was thrown since the given ID is not a valid ObjectId
+      ctx.badRequest(`Invalid id ${ctx.params.id}`);
+    } else {
+      ctx.internalServerError();
+    }
   }
 }
 
 async function remove(ctx, Model) {
   try {
-    const removedDoc = await Model.findOneAndRemove({ _id: ctx.params.id });
-    ctx.ok(removedDoc);
-    console.log('deleted');
+    const removedDoc = await Model.findByIdAndRemove(ctx.params.id);
+    if (removedDoc === null) {
+      ctx.notFound(`Document with id ${ctx.params.id} not found`);
+    } else {
+      ctx.ok(removedDoc);
+    }
   } catch (error) {
-    ctx.internalServerError();
+    if (error.name === 'CastError') {
+      // CastError was thrown since the given ID is not a valid ObjectId
+      ctx.badRequest();
+    } else {
+      ctx.internalServerError();
+    }
   }
 }
 
 module.exports = {
   list,
+  getOne,
   create,
   update,
   remove,

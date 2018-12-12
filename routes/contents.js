@@ -7,7 +7,10 @@ const router = new Router();
 router.get('/', async (ctx) => {
   await DBMethods.list(ctx, Content);
 })
-  .post('/:id', async (ctx) => {
+  .get('/:id', async (ctx) => {
+    await DBMethods.getOne(ctx, Content);
+  })
+  .post('/', async (ctx) => {
     await DBMethods.create(ctx, Content);
   })
   .put('/:id', async (ctx) => {
