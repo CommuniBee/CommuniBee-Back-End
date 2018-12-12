@@ -88,4 +88,6 @@ module.exports = {
   create,
   update,
   remove,
+  handleErrors,
+  handleDocResponse,
 };
