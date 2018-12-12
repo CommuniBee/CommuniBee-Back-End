@@ -1,4 +1,6 @@
-/* eslint-disable no-underscore-dangle */
+const MAX_ALLOWED_PAGE_SIZE = 50;
+const DEFAULT_PAGE_SIZE = 15;
+const DEFAULT_PAGE_NUMBER = 1;
 
 function handleErrors(ctx, error) {
   console.error(error);
@@ -22,9 +24,30 @@ function handleDocResponse(ctx, doc) {
 
 function list(Model) {
   return async function (ctx) {
-    // TODO pagination
+    const allowedToFetchAll = false; // TODO check authentication
+
+    let options = {};
+
+    if (!allowedToFetchAll) {
+      let pageNumber = parseInt(ctx.query.page, 10);
+      if (Number.isNaN(pageNumber)) {
+        pageNumber = DEFAULT_PAGE_NUMBER;
+      }
+
+      let pageSize = parseInt(ctx.query.page_size, 10);
+      if (Number.isNaN(pageSize)) {
+        pageSize = DEFAULT_PAGE_SIZE;
+      }
+      pageSize = Math.min(MAX_ALLOWED_PAGE_SIZE, pageSize);
+
+      options = {
+        skip: pageSize * (pageNumber - 1),
+        limit: pageSize,
+      };
+    }
+
     try {
-      const docs = await Model.find({});
+      const docs = await Model.find({}, null, options);
       ctx.ok(docs);
     } catch (error) {
       handleErrors(ctx, error);
