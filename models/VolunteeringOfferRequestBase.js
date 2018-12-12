@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+var options = {discriminatorKey: 'kind'};
 const volunteeringOfferRequestBaseSchema = new mongoose.Schema({
   numberOfVolunteers: {
     type: Number,
@@ -41,7 +42,7 @@ const volunteeringOfferRequestBaseSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
-});
+}, options);
 
 volunteeringOfferRequestBaseSchema.method({
 });
