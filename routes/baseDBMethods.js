@@ -1,12 +1,24 @@
 /* eslint-disable no-underscore-dangle */
 
+function handleErrors(ctx, error) {
+  console.error(error);
+  if (error.name === 'ValidationError') {
+    ctx.badRequest('Invalid document');
+  } else if (error.name === 'CastError') {
+    // CastError was thrown since the given ID is not a valid ObjectId
+    ctx.badRequest(`Invalid id ${ctx.params.id}`);
+  } else {
+    ctx.internalServerError();
+  }
+}
+
 async function list(ctx, Model) {
   // TODO pagination
   try {
     const docs = await Model.find({});
     ctx.ok(docs);
   } catch (error) {
-    ctx.internalServerError();
+    handleErrors(ctx, error);
   }
 }
 
@@ -19,12 +31,7 @@ async function getOne(ctx, Model) {
       ctx.ok(doc);
     }
   } catch (error) {
-    console.error(error);
-    if (error.name === 'ValidationError') {
-      ctx.badRequest('Invalid document');
-    } else {
-      ctx.internalServerError();
-    }
+    handleErrors(ctx, error);
   }
 }
 
@@ -37,12 +44,7 @@ async function create(ctx, Model) {
     });
     ctx.ok(savedDoc);
   } catch (error) {
-    console.error(error);
-    if (error.name === 'ValidationError') {
-      ctx.badRequest('Invalid document');
-    } else {
-      ctx.internalServerError();
-    }
+    handleErrors(ctx, error);
   }
 }
 
@@ -57,13 +59,7 @@ async function update(ctx, Model) {
       ctx.ok(updatedDoc);
     }
   } catch (error) {
-    console.error(error);
-    if (error.name === 'CastError') {
-      // CastError was thrown since the given ID is not a valid ObjectId
-      ctx.badRequest(`Invalid id ${ctx.params.id}`);
-    } else {
-      ctx.internalServerError();
-    }
+    handleErrors(ctx, error);
   }
 }
 
@@ -76,12 +72,7 @@ async function remove(ctx, Model) {
       ctx.ok(removedDoc);
     }
   } catch (error) {
-    if (error.name === 'CastError') {
-      // CastError was thrown since the given ID is not a valid ObjectId
-      ctx.badRequest();
-    } else {
-      ctx.internalServerError();
-    }
+    handleErrors(ctx, error);
   }
 }
 
