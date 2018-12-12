@@ -22,36 +22,48 @@ function handleDocResponse(ctx, doc) {
   }
 }
 
+function processPaginationParameters(ctx) {
+  let pageNumber = parseInt(ctx.query.page, 10);
+  if (Number.isNaN(pageNumber)) {
+    pageNumber = DEFAULT_PAGE_NUMBER;
+  } else if (pageNumber < 1) {
+    throw new RangeError('Query parameter \'page\' must be a positive number');
+  }
+
+  let pageSize = parseInt(ctx.query.page_size, 10);
+  if (Number.isNaN(pageSize)) {
+    pageSize = DEFAULT_PAGE_SIZE;
+  } else if (pageSize < 1) {
+    throw new RangeError('Query parameter \'page_size\' must be a positive number');
+  }
+  pageSize = Math.min(MAX_ALLOWED_PAGE_SIZE, pageSize);
+
+  return {
+    skip: pageSize * (pageNumber - 1),
+    limit: pageSize,
+  };
+}
+
 function list(Model) {
   return async function (ctx) {
     const allowedToFetchAll = false; // TODO check authentication
 
     let options = {};
 
-    if (!allowedToFetchAll) {
-      let pageNumber = parseInt(ctx.query.page, 10);
-      if (Number.isNaN(pageNumber)) {
-        pageNumber = DEFAULT_PAGE_NUMBER;
-      }
-
-      let pageSize = parseInt(ctx.query.page_size, 10);
-      if (Number.isNaN(pageSize)) {
-        pageSize = DEFAULT_PAGE_SIZE;
-      }
-      pageSize = Math.min(MAX_ALLOWED_PAGE_SIZE, pageSize);
-
-      options = {
-        skip: pageSize * (pageNumber - 1),
-        limit: pageSize,
-      };
-    }
-
     try {
-      const docs = await Model.find({}, null, options);
-      ctx.ok(docs);
-    } catch (error) {
-      handleErrors(ctx, error);
+      if (!allowedToFetchAll) {
+        options = processPaginationParameters(ctx);
+      }
+      try {
+        const docs = await Model.find({}, null, options);
+        ctx.ok(docs);
+      } catch (error) {
+        handleErrors(ctx, error);
+      }
+    } catch (rangeError) {
+      ctx.badRequest(rangeError.message);
     }
+
   };
 }
 
