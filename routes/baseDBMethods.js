@@ -25,28 +25,30 @@ function handleDocResponse(ctx, doc) {
 }
 
 function proccessDatesRangeParameters(ctx) {
-  const startDate = parseInt(ctx.query.startDate, 10) || null;
-  const endDate = parseInt(ctx.query.endDate, 10) || null;
+  const startDate = parseInt(ctx.query.startDate, 10);
+  const endDate = parseInt(ctx.query.endDate, 10);
 
   const datesFilter = {};
 
-  if ((startDate != null) && (endDate != null) && (startDate > endDate)) {
-    throw new RangeError('Query parameter \'startDate\' can\'t be bigger than Query parameter \'endDate\'');
-  } else if ((startDate != null) || (endDate != null)) {
+  if ((!Number.isNaN(startDate))
+      && (!Number.isNaN(endDate))
+      && (startDate > endDate)) {
+    throw new RangeError('Query parameter \'startDate\' must be earlier than query parameter \'endDate\'');
+  } else if ((!Number.isNaN(startDate)) || (!Number.isNaN(endDate))) {
     datesFilter.date = {};
 
-    if (startDate != null) {
+    if (!Number.isNaN(startDate)) {
       if (startDate < 1) {
         throw new RangeError('Query parameter \'startDate\' must be a positive number');
       }
-      datesFilter.date.$gte = moment(startDate).tz('Israel').format();
+      datesFilter.date.$gte = moment(startDate).tz('Asia/Jerusalem').format();
     }
 
-    if (endDate != null) {
+    if (!Number.isNaN(endDate)) {
       if (endDate < 1) {
         throw new RangeError('Query parameter \'endDate\' must be a positive number');
       }
-      datesFilter.date.$lte = moment(endDate).tz('Israel').format();
+      datesFilter.date.$lte = moment(endDate).tz('Asia/Jerusalem').format();
     }
   }
 
