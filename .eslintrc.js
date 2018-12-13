@@ -16,5 +16,6 @@ module.exports = {
     }, {
       enforceForRenamedProperties: false,
     }],
+    "no-console": "off",
   }
 };
