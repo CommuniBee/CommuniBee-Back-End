@@ -22,7 +22,10 @@ function handleDocResponse(ctx, doc) {
   }
 }
 
+// Handles query paramters from GET / API
 function processPaginationParameters(ctx) {
+
+  // Proccessing pagination
   const pageNumber = parseInt(ctx.query.page, 10) || DEFAULT_PAGE_NUMBER;
   if (pageNumber < 1) {
     throw new RangeError('Query parameter \'page\' must be a positive number');
@@ -34,9 +37,39 @@ function processPaginationParameters(ctx) {
   }
   pageSize = Math.min(MAX_ALLOWED_PAGE_SIZE, pageSize);
 
+  // Proccessing dates range
+  const moment = require('moment-timezone')
+  const startDate = parseInt(ctx.query.startDate) || null;
+  const endDate = parseInt(ctx.query.endDate) || null;
+
+  let datesFilter = {};
+  
+  if ((startDate != null) && (endDate != null) && (startDate > endDate)) {
+    throw new RangeError('Query parameter \'startDate\' can\'t be bigger than Query parameter \'endDate\'');
+  } else if ((startDate != null) || (endDate != null)) {
+
+    if (startDate < 1 && startDate != null) {
+      throw new RangeError('Query parameter \'startDate\' must be a positive number');
+    }
+
+    if (endDate < 1 && endDate != null) {
+      throw new RangeError('Query parameter \'endDate\' must be a positive number');
+    }
+
+    datesFilter.date = {};
+
+    if (startDate != null) {
+      datesFilter.date.$gte = moment(startDate).tz('Israel').format();
+    }
+    if (endDate != null) {
+      datesFilter.date.$lte = moment(endDate).tz('Israel').format();
+    }
+  }
+
   return {
-    skip: pageSize * (pageNumber - 1),
-    limit: pageSize,
+    datesFilter,
+    options: { skip: pageSize * (pageNumber - 1),
+    limit: pageSize, }  
   };
 }
 
@@ -45,13 +78,16 @@ function list(Model) {
     const allowedToFetchAll = false; // TODO check authentication
 
     let options = {};
+    let queryFilter = {};
 
     try {
       if (!allowedToFetchAll) {
-        options = processPaginationParameters(ctx);
+        const paginationParams = processPaginationParameters(ctx);
+        options = paginationParams.options;
+        queryFilter = paginationParams.datesFilter;
       }
       try {
-        const docs = await Model.find({}, null, options);
+        const docs = await Model.find(queryFilter, null, options);
         ctx.ok(docs);
       } catch (error) {
         handleErrors(ctx, error);
