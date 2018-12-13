@@ -1,17 +1,17 @@
 const Router = require('koa-router');
 const VolunteeringEvent = require('../models/VolunteeringEvent');
 const DBMethods = require('./baseDBMethods');
-const VolunteeringOfferRequestBaseModel = require('../models/VolunteeringOfferRequestBase');
+const VolunteeringRequestOfferBaseModel = require('../models/VolunteeringRequestOfferBase');
 
 const router = new Router();
 
-function getOfferRequestOfEvent(fieldName) {
+function getRequestOrOffer(fieldName) {
   return async function (ctx) {
     try {
       const requestedField = await VolunteeringEvent.findById(ctx.params.id)
         .populate({
           path: fieldName,
-          model: VolunteeringOfferRequestBaseModel,
+          model: VolunteeringRequestOfferBaseModel,
         });
       DBMethods.handleDocResponse(ctx, requestedField);
     } catch (error) {
@@ -22,8 +22,8 @@ function getOfferRequestOfEvent(fieldName) {
 
 router.get('/', DBMethods.list(VolunteeringEvent))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
-  .get('/:id/request', getOfferRequestOfEvent('request'))
-  .get('/:id/offer', getOfferRequestOfEvent('offer'))
+  .get('/:id/request', getRequestOrOffer('request'))
+  .get('/:id/offer', getRequestOrOffer('offer'))
   .post('/', DBMethods.create(VolunteeringEvent))
   .put('/:id', DBMethods.update(VolunteeringEvent))
   .delete('/:id', DBMethods.remove(VolunteeringEvent));
