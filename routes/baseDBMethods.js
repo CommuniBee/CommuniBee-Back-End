@@ -23,17 +23,13 @@ function handleDocResponse(ctx, doc) {
 }
 
 function processPaginationParameters(ctx) {
-  let pageNumber = parseInt(ctx.query.page, 10);
-  if (Number.isNaN(pageNumber)) {
-    pageNumber = DEFAULT_PAGE_NUMBER;
-  } else if (pageNumber < 1) {
+  const pageNumber = parseInt(ctx.query.page, 10) || DEFAULT_PAGE_NUMBER;
+  if (pageNumber < 1) {
     throw new RangeError('Query parameter \'page\' must be a positive number');
   }
 
-  let pageSize = parseInt(ctx.query.page_size, 10);
-  if (Number.isNaN(pageSize)) {
-    pageSize = DEFAULT_PAGE_SIZE;
-  } else if (pageSize < 1) {
+  let pageSize = parseInt(ctx.query.page_size, 10) || DEFAULT_PAGE_SIZE;
+  if (pageSize < 1) {
     throw new RangeError('Query parameter \'page_size\' must be a positive number');
   }
   pageSize = Math.min(MAX_ALLOWED_PAGE_SIZE, pageSize);
@@ -63,7 +59,6 @@ function list(Model) {
     } catch (rangeError) {
       ctx.badRequest(rangeError.message);
     }
-
   };
 }
 
