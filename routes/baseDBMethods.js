@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 const MAX_ALLOWED_PAGE_SIZE = 50;
 const DEFAULT_PAGE_SIZE = 15;
 const DEFAULT_PAGE_NUMBER = 1;
@@ -22,32 +24,15 @@ function handleDocResponse(ctx, doc) {
   }
 }
 
-// Handles query paramters from GET / API
-function processPaginationParameters(ctx) {
+function proccessDatesRangeParameters(ctx) {
+  const startDate = parseInt(ctx.query.startDate, 10) || null;
+  const endDate = parseInt(ctx.query.endDate, 10) || null;
 
-  // Proccessing pagination
-  const pageNumber = parseInt(ctx.query.page, 10) || DEFAULT_PAGE_NUMBER;
-  if (pageNumber < 1) {
-    throw new RangeError('Query parameter \'page\' must be a positive number');
-  }
+  const datesFilter = {};
 
-  let pageSize = parseInt(ctx.query.page_size, 10) || DEFAULT_PAGE_SIZE;
-  if (pageSize < 1) {
-    throw new RangeError('Query parameter \'page_size\' must be a positive number');
-  }
-  pageSize = Math.min(MAX_ALLOWED_PAGE_SIZE, pageSize);
-
-  // Proccessing dates range
-  const moment = require('moment-timezone')
-  const startDate = parseInt(ctx.query.startDate) || null;
-  const endDate = parseInt(ctx.query.endDate) || null;
-
-  let datesFilter = {};
-  
   if ((startDate != null) && (endDate != null) && (startDate > endDate)) {
     throw new RangeError('Query parameter \'startDate\' can\'t be bigger than Query parameter \'endDate\'');
   } else if ((startDate != null) || (endDate != null)) {
-
     if (startDate < 1 && startDate != null) {
       throw new RangeError('Query parameter \'startDate\' must be a positive number');
     }
@@ -66,10 +51,24 @@ function processPaginationParameters(ctx) {
     }
   }
 
+  return datesFilter;
+}
+
+function processPaginationParameters(ctx) {
+  const pageNumber = parseInt(ctx.query.page, 10) || DEFAULT_PAGE_NUMBER;
+  if (pageNumber < 1) {
+    throw new RangeError('Query parameter \'page\' must be a positive number');
+  }
+
+  let pageSize = parseInt(ctx.query.page_size, 10) || DEFAULT_PAGE_SIZE;
+  if (pageSize < 1) {
+    throw new RangeError('Query parameter \'page_size\' must be a positive number');
+  }
+  pageSize = Math.min(MAX_ALLOWED_PAGE_SIZE, pageSize);
+
   return {
-    datesFilter,
-    options: { skip: pageSize * (pageNumber - 1),
-    limit: pageSize, }  
+    skip: pageSize * (pageNumber - 1),
+    limit: pageSize,
   };
 }
 
@@ -82,9 +81,8 @@ function list(Model) {
 
     try {
       if (!allowedToFetchAll) {
-        const paginationParams = processPaginationParameters(ctx);
-        options = paginationParams.options;
-        queryFilter = paginationParams.datesFilter;
+        options = processPaginationParameters(ctx);
+        queryFilter = proccessDatesRangeParameters(ctx);
       }
       try {
         const docs = await Model.find(queryFilter, null, options);
