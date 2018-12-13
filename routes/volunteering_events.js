@@ -5,6 +5,18 @@ const VolunteeringOfferRequestBaseModel = require('../models/VolunteeringOfferRe
 
 const router = new Router();
 
+function getOfferRequestOfEvent(fieldName) {
+  return async function (ctx) {
+    try {
+      const requestedField = await VolunteeringEvent.findById(ctx.params.id)
+        .populate({ path: fieldName, model: VolunteeringOfferRequestBaseModel });
+      DBMethods.handleDocResponse(ctx, requestedField);
+    } catch (error) {
+      DBMethods.handleErrors(ctx, error);
+    }
+  };
+}
+
 router.get('/', DBMethods.list(VolunteeringEvent))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
   .get('/:id/request', getOfferRequestOfEvent('request'))
@@ -12,17 +24,5 @@ router.get('/', DBMethods.list(VolunteeringEvent))
   .post('/', DBMethods.create(VolunteeringEvent))
   .put('/:id', DBMethods.update(VolunteeringEvent))
   .delete('/:id', DBMethods.remove(VolunteeringEvent));
-
-function getOfferRequestOfEvent (fieldName) {
-    return async function (ctx) {
-        try {
-            const requestedField = await VolunteeringEvent.findById(ctx.params.id)
-                                                          .populate({path: fieldName, model: VolunteeringOfferRequestBaseModel});
-            DBMethods.handleDocResponse(ctx, requestedField);
-        } catch (error) {
-            DBMethods.handleErrors(ctx, error);
-        }
-    }
-}
 
 module.exports = router.routes();
