@@ -9,7 +9,10 @@ function getOfferRequestOfEvent(fieldName) {
   return async function (ctx) {
     try {
       const requestedField = await VolunteeringEvent.findById(ctx.params.id)
-        .populate({ path: fieldName, model: VolunteeringOfferRequestBaseModel });
+        .populate({
+          path: fieldName,
+          model: VolunteeringOfferRequestBaseModel,
+        });
       DBMethods.handleDocResponse(ctx, requestedField);
     } catch (error) {
       DBMethods.handleErrors(ctx, error);
