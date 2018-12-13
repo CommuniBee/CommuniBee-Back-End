@@ -33,20 +33,19 @@ function proccessDatesRangeParameters(ctx) {
   if ((startDate != null) && (endDate != null) && (startDate > endDate)) {
     throw new RangeError('Query parameter \'startDate\' can\'t be bigger than Query parameter \'endDate\'');
   } else if ((startDate != null) || (endDate != null)) {
-    if (startDate < 1 && startDate != null) {
-      throw new RangeError('Query parameter \'startDate\' must be a positive number');
-    }
-
-    if (endDate < 1 && endDate != null) {
-      throw new RangeError('Query parameter \'endDate\' must be a positive number');
-    }
-
     datesFilter.date = {};
 
     if (startDate != null) {
+      if (startDate < 1) {
+        throw new RangeError('Query parameter \'startDate\' must be a positive number');
+      }
       datesFilter.date.$gte = moment(startDate).tz('Israel').format();
     }
+
     if (endDate != null) {
+      if (endDate < 1) {
+        throw new RangeError('Query parameter \'endDate\' must be a positive number');
+      }
       datesFilter.date.$lte = moment(endDate).tz('Israel').format();
     }
   }
