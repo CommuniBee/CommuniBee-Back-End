@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 const MAX_ALLOWED_PAGE_SIZE = 50;
 const DEFAULT_PAGE_SIZE = 15;
 const DEFAULT_PAGE_NUMBER = 1;
@@ -20,6 +22,37 @@ function handleDocResponse(ctx, doc) {
   } else {
     ctx.ok(doc);
   }
+}
+
+function proccessDatesRangeParameters(ctx) {
+  const startDate = parseInt(ctx.query.startDate, 10);
+  const endDate = parseInt(ctx.query.endDate, 10);
+
+  const datesFilter = {};
+
+  if ((!Number.isNaN(startDate))
+      && (!Number.isNaN(endDate))
+      && (startDate > endDate)) {
+    throw new RangeError('Query parameter \'startDate\' must be earlier than query parameter \'endDate\'');
+  } else if ((!Number.isNaN(startDate)) || (!Number.isNaN(endDate))) {
+    datesFilter.date = {};
+
+    if (!Number.isNaN(startDate)) {
+      if (startDate < 1) {
+        throw new RangeError('Query parameter \'startDate\' must be a positive number');
+      }
+      datesFilter.date.$gte = moment(startDate).tz('Asia/Jerusalem').format();
+    }
+
+    if (!Number.isNaN(endDate)) {
+      if (endDate < 1) {
+        throw new RangeError('Query parameter \'endDate\' must be a positive number');
+      }
+      datesFilter.date.$lte = moment(endDate).tz('Asia/Jerusalem').format();
+    }
+  }
+
+  return datesFilter;
 }
 
 function processPaginationParameters(ctx) {
@@ -45,13 +78,15 @@ function list(Model) {
     const allowedToFetchAll = false; // TODO check authentication
 
     let options = {};
+    let queryFilter = {};
 
     try {
       if (!allowedToFetchAll) {
         options = processPaginationParameters(ctx);
+        queryFilter = proccessDatesRangeParameters(ctx);
       }
       try {
-        const docs = await Model.find({}, null, options);
+        const docs = await Model.find(queryFilter, null, options);
         ctx.ok(docs);
       } catch (error) {
         handleErrors(ctx, error);
