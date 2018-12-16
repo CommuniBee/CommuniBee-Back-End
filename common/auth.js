@@ -10,8 +10,13 @@ const BUMBLEB_ROLE = 'bumbleb';
 */
 const ROLES = [USER_ROLE, FRC_TEAM_ROLE, BUMBLEB_ROLE];
 
-const getRole = (ctx => ctx.state.user.role);
-const hasRolePermissions = (role => (ctx => ROLES.indexOf(getRole(ctx)) >= ROLES.indexOf(role)));
+const hasRolePermissions = (role => ((ctx) => {
+  if (ctx.state.user === undefined || ctx.state.user.role === undefined) {
+    return false;
+  }
+
+  return ROLES.indexOf(ctx.state.user.role) >= ROLES.indexOf(role);
+}));
 
 const validateRolePermissions = (role => ((ctx, next) => {
   if (hasRolePermissions(role)(ctx)) {
