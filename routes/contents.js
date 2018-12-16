@@ -7,7 +7,7 @@ const router = new Router();
 
 router.get('/', DBMethods.list(Content))
   .get('/:id', DBMethods.getById(Content))
-  .post('/', auth.authenticate, auth.validateFRCTeamPermissions, DBMethods.create(Content))
+  .post('/', auth.authenticate, DBMethods.create(Content))
   .put('/:id', auth.authenticate, auth.validateFRCTeamPermissions, DBMethods.update(Content))
   .delete('/:id', auth.authenticate, auth.validateFRCTeamPermissions, DBMethods.remove(Content));
 

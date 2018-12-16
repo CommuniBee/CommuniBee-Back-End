@@ -42,6 +42,10 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  createdByUserId: {
+    type: String,
+    required: true,
+  },
 }, options);
 
 VolunteeringRequestOfferBaseSchema.method({

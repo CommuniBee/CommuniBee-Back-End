@@ -26,6 +26,19 @@ const validateRolePermissions = (role => ((ctx, next) => {
   }
 }));
 
+const modificationIsAllowed = (Model => (async (ctx, next) => {
+  if (hasRolePermissions(FRC_TEAM_ROLE)(ctx)) {
+    next();
+  } else {
+    const doc = await Model.findById(ctx.params.id);
+    if (doc.createdByUserId === ctx.state.user.user_id) {
+      next();
+    } else {
+      ctx.unauthorized();
+    }
+  }
+}));
+
 module.exports = {
   authenticate: jwt({ secret: process.env.AUTH0_SECRET }),
 
@@ -36,4 +49,6 @@ module.exports = {
   hasUserPermissions: hasRolePermissions(USER_ROLE),
   hasFRCTeamPermissions: hasRolePermissions(FRC_TEAM_ROLE),
   hasBumbleBPermissions: hasRolePermissions(BUMBLEB_ROLE),
+
+  modificationIsAllowed,
 };
