@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 
 const contentSchema = new mongoose.Schema({
-  files: {
-    type: [String],
-    required: true,
+  file: {
+    name: {
+      type: String,
+      required: true,
+    },
+    buffer: {
+      type: mongoose.Schema.Types.Buffer,
+      required: true,
+    },
   },
   title: {
     type: String,
