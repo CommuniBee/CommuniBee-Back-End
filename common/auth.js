@@ -11,7 +11,7 @@ const BUMBLEB_ROLE = 'bumbleb';
 const ROLES = [USER_ROLE, FRC_TEAM_ROLE, BUMBLEB_ROLE];
 
 const hasRolePermissions = (role => ((ctx) => {
-  if (ctx.state.user === undefined || ctx.state.user.role === undefined) {
+  if (!ctx.state.user || !ctx.state.user.role) {
     return false;
   }
 
