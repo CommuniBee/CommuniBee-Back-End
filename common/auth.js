@@ -42,7 +42,11 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
 }));
 
 module.exports = {
-  authenticate: jwt({ secret: process.env.AUTH0_SECRET }),
+  authenticate: jwt({
+    secret: process.env.AUTH0_SECRET,
+    audience: process.env.AUTH0_AUDIENCE,
+    issuer: process.env.AUTH0_ISSUER,
+  }),
 
   validateUserPermissions: validateRolePermissions(USER_ROLE),
   validateFRCTeamPermissions: validateRolePermissions(FRC_TEAM_ROLE),

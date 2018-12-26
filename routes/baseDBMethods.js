@@ -77,7 +77,7 @@ function processPaginationParameters(ctx) {
 
 function list(Model) {
   return async function (ctx) {
-    const allowedToFetchAll = auth.hasFRCTeamPermissions(ctx) || auth.hasBumbleBPermissions(ctx);
+    const allowedToFetchAll = auth.hasFRCTeamPermissions(ctx);
 
     let options = {};
     let queryFilter = {};
