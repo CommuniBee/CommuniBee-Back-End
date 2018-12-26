@@ -31,7 +31,9 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
     next();
   } else {
     const doc = await Model.findById(ctx.params.id);
-    if (doc.createdByUserId === ctx.state.user.user_id) {
+    if (doc === null) {
+      ctx.notFound(`Document with id ${ctx.params.id} not found`);
+    } else if (doc.createdByUserId === ctx.state.user.user_id) {
       next();
     } else {
       ctx.unauthorized();
