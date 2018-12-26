@@ -7,7 +7,7 @@ const DEFAULT_PAGE_SIZE = 15;
 const DEFAULT_PAGE_NUMBER = 1;
 
 function handleErrors(ctx, error) {
-  logger.warn('handling error in DBMethods: ', error);
+  logger.warn('Handling error in DBMethods: ', error);
   if (error.name === 'ValidationError') {
     ctx.badRequest('Invalid document');
   } else if (error.name === 'CastError') {
@@ -87,14 +87,14 @@ function list(Model) {
         options = processPaginationParameters(ctx);
         queryFilter = processDatesRangeParameters(ctx);
       }
+      try {
+        const docs = await Model.find(queryFilter, null, options);
+        ctx.ok(docs);
+      } catch (error) {
+        handleErrors(ctx, error);
+      }
     } catch (rangeError) {
       ctx.badRequest(rangeError.message);
-    }
-    try {
-      const docs = await Model.find(queryFilter, null, options);
-      ctx.ok(docs);
-    } catch (error) {
-      handleErrors(ctx, error);
     }
   };
 }
@@ -129,8 +129,8 @@ function update(Model) {
   return async (ctx) => {
     try {
       const updatedDoc = await Model.findByIdAndUpdate(ctx.params.id,
-        {$set: ctx.request.body},
-        {new: true});
+        { $set: ctx.request.body },
+        { new: true });
       handleDocResponse(ctx, updatedDoc);
     } catch (error) {
       handleErrors(ctx, error);

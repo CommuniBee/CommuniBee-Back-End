@@ -4,8 +4,8 @@ const server = require('./server');
 const logger = require('./common/logger');
 
 process
-  .on('unhandledRejection', (reason, p) => {
-    logger.error('Unhandled Rejection at Promise', reason, p);
+  .on('unhandledRejection', (reason, promise) => {
+    logger.error('Unhandled Rejection at Promise', reason, promise);
   })
   .on('uncaughtException', (err) => {
     logger.error('Uncaught Exception thrown', err);
@@ -17,7 +17,7 @@ server.listen(port, () => logger.info(`API server started on ${port}`));
 
 // Database connection
 mongoose.connection.on('error', error => logger.error('MongoDB connection error:', error));
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 mongoose.set('useFindAndModify', false);
 if (process.env.NODE_ENV === 'development') {
   mongoose.set('debug', (coll, method, query, doc, options) => {

@@ -7,4 +7,5 @@ const REGIONS = [
   'דרום',
 ];
 
+// Returns a copy of the regions array
 module.exports.getRegions = REGIONS.slice;

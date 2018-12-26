@@ -16,6 +16,5 @@ module.exports = {
     }, {
       enforceForRenamedProperties: false,
     }],
-    'object-curly-spacing': ['error', 'never'],
   },
 };
