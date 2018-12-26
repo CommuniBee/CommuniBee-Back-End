@@ -7,8 +7,12 @@ const router = new Router();
 
 router.get('/', DBMethods.list(VolunteeringRequest))
   .get('/:id', DBMethods.getById(VolunteeringRequest))
-  .post('/', auth.authenticate, DBMethods.create(VolunteeringRequest))
-  .put('/:id', auth.authenticate, auth.modificationIsAllowed, DBMethods.update(VolunteeringRequest))
-  .delete('/:id', auth.authenticate, auth.modificationIsAllowed, DBMethods.remove(VolunteeringRequest));
+
+  .use(auth.authenticate)
+  .post('/', DBMethods.create(VolunteeringRequest))
+
+  .use(auth.modificationIsAllowed)
+  .put('/:id', DBMethods.update(VolunteeringRequest))
+  .delete('/:id', DBMethods.remove(VolunteeringRequest));
 
 module.exports = router.routes();

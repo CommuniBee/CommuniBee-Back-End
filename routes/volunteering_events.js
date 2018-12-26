@@ -25,8 +25,11 @@ router.get('/', DBMethods.list(VolunteeringEvent))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
   .get('/:id/request', getRequestOrOffer('request'))
   .get('/:id/offer', getRequestOrOffer('offer'))
-  .post('/', auth.authenticate, auth.validateFRCTeamPermissions, DBMethods.create(VolunteeringEvent))
-  .put('/:id', auth.authenticate, auth.validateFRCTeamPermissions, DBMethods.update(VolunteeringEvent))
-  .delete('/:id', auth.authenticate, auth.validateFRCTeamPermissions, DBMethods.remove(VolunteeringEvent));
+
+  .use(auth.authenticate)
+  .use(auth.validateFRCTeamPermissions)
+  .post('/', DBMethods.create(VolunteeringEvent))
+  .put('/:id', DBMethods.update(VolunteeringEvent))
+  .delete('/:id', DBMethods.remove(VolunteeringEvent));
 
 module.exports = router.routes();
