@@ -24,10 +24,4 @@ const volunteeringEventSchema = new mongoose.Schema({
   },
 });
 
-volunteeringEventSchema.method({
-});
-
-volunteeringEventSchema.static({
-});
-
 module.exports = mongoose.model('VolunteeringEvent', volunteeringEventSchema);

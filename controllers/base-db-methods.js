@@ -1,11 +1,13 @@
 const moment = require('moment-timezone');
 
+const logger = require('../common/logger');
+
 const MAX_ALLOWED_PAGE_SIZE = 50;
 const DEFAULT_PAGE_SIZE = 15;
 const DEFAULT_PAGE_NUMBER = 1;
 
 function handleErrors(ctx, error) {
-  console.error(error);
+  logger.warn('Handling error in DBMethods: ', error);
   if (error.name === 'ValidationError') {
     ctx.badRequest('Invalid document');
   } else if (error.name === 'CastError') {
@@ -24,15 +26,15 @@ function handleDocResponse(ctx, doc) {
   }
 }
 
-function proccessDatesRangeParameters(ctx) {
+function processDatesRangeParameters(ctx) {
   const startDate = parseInt(ctx.query.startDate, 10);
   const endDate = parseInt(ctx.query.endDate, 10);
 
   const datesFilter = {};
 
   if ((!Number.isNaN(startDate))
-      && (!Number.isNaN(endDate))
-      && (startDate > endDate)) {
+    && (!Number.isNaN(endDate))
+    && (startDate > endDate)) {
     throw new RangeError('Query parameter \'startDate\' must be earlier than query parameter \'endDate\'');
   } else if ((!Number.isNaN(startDate)) || (!Number.isNaN(endDate))) {
     datesFilter.date = {};
@@ -74,7 +76,7 @@ function processPaginationParameters(ctx) {
 }
 
 function list(Model) {
-  return async function (ctx) {
+  return async (ctx) => {
     const allowedToFetchAll = false; // TODO check authentication
 
     let options = {};
@@ -83,7 +85,7 @@ function list(Model) {
     try {
       if (!allowedToFetchAll) {
         options = processPaginationParameters(ctx);
-        queryFilter = proccessDatesRangeParameters(ctx);
+        queryFilter = processDatesRangeParameters(ctx);
       }
       try {
         const docs = await Model.find(queryFilter, null, options);
@@ -98,7 +100,7 @@ function list(Model) {
 }
 
 function getById(Model) {
-  return async function (ctx) {
+  return async (ctx) => {
     try {
       const doc = await Model.findById(ctx.params.id);
       handleDocResponse(ctx, doc);
@@ -109,7 +111,7 @@ function getById(Model) {
 }
 
 function create(Model) {
-  return async function (ctx) {
+  return async (ctx) => {
     const requestedDoc = new Model(ctx.request.body);
 
     try {
@@ -124,7 +126,7 @@ function create(Model) {
 }
 
 function update(Model) {
-  return async function (ctx) {
+  return async (ctx) => {
     try {
       const updatedDoc = await Model.findByIdAndUpdate(ctx.params.id,
         { $set: ctx.request.body },
@@ -137,7 +139,7 @@ function update(Model) {
 }
 
 function remove(Model) {
-  return async function (ctx) {
+  return async (ctx) => {
     try {
       const removedDoc = await Model.findByIdAndRemove(ctx.params.id);
       handleDocResponse(ctx, removedDoc);

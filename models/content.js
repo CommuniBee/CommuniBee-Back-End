@@ -29,10 +29,4 @@ const contentSchema = new mongoose.Schema({
   },
 });
 
-contentSchema.method({
-});
-
-contentSchema.static({
-});
-
 module.exports = mongoose.model('Content', contentSchema);

@@ -7,10 +7,4 @@ const categorySchema = new mongoose.Schema({
   },
 });
 
-categorySchema.method({
-});
-
-categorySchema.static({
-});
-
 module.exports = mongoose.model('Category', categorySchema);

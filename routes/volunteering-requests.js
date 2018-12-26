@@ -1,6 +1,6 @@
 const Router = require('koa-router');
-const VolunteeringRequest = require('../models/VolunteeringRequest');
-const DBMethods = require('./baseDBMethods');
+const VolunteeringRequest = require('../models/volunteering-request');
+const DBMethods = require('../controllers/base-db-methods');
 
 const router = new Router();
 

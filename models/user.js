@@ -13,10 +13,4 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.method({
-});
-
-UserSchema.static({
-});
-
 module.exports = mongoose.model('User', UserSchema);

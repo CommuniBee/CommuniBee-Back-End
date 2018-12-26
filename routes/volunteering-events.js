@@ -1,12 +1,12 @@
 const Router = require('koa-router');
-const VolunteeringEvent = require('../models/VolunteeringEvent');
-const DBMethods = require('./baseDBMethods');
-const VolunteeringRequestOfferBaseModel = require('../models/VolunteeringRequestOfferBase');
+const VolunteeringEvent = require('../models/volunteering-event');
+const DBMethods = require('../controllers/base-db-methods');
+const VolunteeringRequestOfferBaseModel = require('../models/volunteering-request-offer-base');
 
 const router = new Router();
 
 function getRequestOrOffer(fieldName) {
-  return async function (ctx) {
+  return async (ctx) => {
     try {
       const requestedField = await VolunteeringEvent.findById(ctx.params.id)
         .populate({

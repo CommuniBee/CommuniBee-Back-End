@@ -1,12 +1,14 @@
 const Koa = require('koa');
 const Router = require('koa-router');
-const Logger = require('koa-logger');
+const koaLogger = require('koa-logger');
 const Cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
 const Helmet = require('koa-helmet');
 const respond = require('koa-respond');
 const serve = require('koa-static');
 const koaSwagger = require('koa2-swagger-ui');
+
+const logger = require('./common/logger');
 
 const app = new Koa();
 const router = new Router();
@@ -23,7 +25,7 @@ app.use(
 app.use(Helmet());
 
 if (process.env.NODE_ENV === 'development') {
-  app.use(Logger());
+  app.use(koaLogger(str => logger.info(str)));
 }
 
 app.use(Cors());
