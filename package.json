@@ -16,9 +16,10 @@
   "version": "1.2.2",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index",
-    "start": "cross-env NODE_ENVIRONMENT=production node index",
-    "lint": "node_modules/.bin/eslint ."
+    "dev": "cross-env NODE_ENV=development nodemon index",
+    "start": "cross-env NODE_ENV=production node index",
+    "lint": "node_modules/.bin/eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "dependencies": {
     "@koa/cors": "^2.2.2",
@@ -35,7 +36,8 @@
     "koa2-swagger-ui": "^2.11.6",
     "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
-    "mongoose": "^5.3.15"
+    "mongoose": "^5.3.15",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "eslint": "^5.9.0",

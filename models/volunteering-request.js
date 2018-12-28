@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const VolunteeringRequestOfferBase = require('./VolunteeringRequestOfferBase');
+const VolunteeringRequestOfferBase = require('./volunteering-request-offer-base');
 
 const volunteeringRequestSchema = new mongoose.Schema({
   location: {
@@ -10,12 +10,6 @@ const volunteeringRequestSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-});
-
-volunteeringRequestSchema.method({
-});
-
-volunteeringRequestSchema.static({
 });
 
 module.exports = VolunteeringRequestOfferBase.discriminator('VolunteeringRequest', volunteeringRequestSchema);
