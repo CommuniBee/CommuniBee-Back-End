@@ -13,10 +13,9 @@ const volunteeringEventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  userInitiated: {
-    type: mongoose.Schema.Types.ObjectId,
+  createdByUserId: {
+    type: String,
     required: true,
-    ref: 'User',
   },
   files: {
     type: [String],

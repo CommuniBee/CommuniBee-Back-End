@@ -1,6 +1,6 @@
 const moment = require('moment-timezone');
-
 const logger = require('../common/logger');
+const auth = require('../common/auth');
 
 const MAX_ALLOWED_PAGE_SIZE = 50;
 const DEFAULT_PAGE_SIZE = 15;
@@ -77,7 +77,7 @@ function processPaginationParameters(ctx) {
 
 function list(Model) {
   return async (ctx) => {
-    const allowedToFetchAll = false; // TODO check authentication
+    const allowedToFetchAll = auth.hasFRCTeamPermissions(ctx);
 
     let options = {};
     let queryFilter = {};

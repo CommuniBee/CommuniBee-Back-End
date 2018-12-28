@@ -1,7 +1,8 @@
 const Router = require('koa-router');
 const VolunteeringEvent = require('../models/volunteering-event');
-const DBMethods = require('../controllers/base-db-methods');
+const DBMethods = require('./base-db-methods');
 const VolunteeringRequestOfferBaseModel = require('../models/volunteering-request-offer-base');
+const auth = require('../common/auth');
 
 const router = new Router();
 
@@ -24,6 +25,9 @@ router.get('/', DBMethods.list(VolunteeringEvent))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
   .get('/:id/request', getRequestOrOffer('request'))
   .get('/:id/offer', getRequestOrOffer('offer'))
+
+  .use(auth.authenticate)
+  .use(auth.validateFRCTeamPermissions)
   .post('/', DBMethods.create(VolunteeringEvent))
   .put('/:id', DBMethods.update(VolunteeringEvent))
   .delete('/:id', DBMethods.remove(VolunteeringEvent));
