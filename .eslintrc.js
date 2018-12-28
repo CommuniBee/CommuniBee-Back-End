@@ -1,7 +1,7 @@
 module.exports = {
-  "extends": "airbnb-base",
+  'extends': 'airbnb-base',
 
-  "rules": {
+  'rules': {
     // Prefer destructuring from arrays and objects
     // https://eslint.org/docs/rules/prefer-destructuring
     'prefer-destructuring': ['warn', {
@@ -16,6 +16,5 @@ module.exports = {
     }, {
       enforceForRenamedProperties: false,
     }],
-    "no-console": "off",
-  }
+  },
 };

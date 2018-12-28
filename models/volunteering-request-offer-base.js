@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const volunteeringOfferRequestBaseSchema = new mongoose.Schema({
+const options = { discriminatorKey: 'kind' };
+const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
   numberOfVolunteers: {
     type: Number,
     required: true,
@@ -41,12 +42,10 @@ const volunteeringOfferRequestBaseSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
-});
+  createdByUserId: {
+    type: String,
+    required: true,
+  },
+}, options);
 
-volunteeringOfferRequestBaseSchema.method({
-});
-
-volunteeringOfferRequestBaseSchema.static({
-});
-
-module.exports = mongoose.model('VolunteeringOfferRequestBase', volunteeringOfferRequestBaseSchema);
+module.exports = mongoose.model('VolunteeringRequestOfferBase', VolunteeringRequestOfferBaseSchema);
