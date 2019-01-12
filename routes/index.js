@@ -8,7 +8,7 @@ const volunteeringRequestsRoutes = require('./volunteering-requests');
 
 module.exports = (router) => {
   router.use('/categories', categoriesRoutes);
-  router.use('/users', categoriesRoutes);
+  router.use('/users', usersRoutes);
   router.use('/contents', contentsRoutes);
   router.use('/regions', regionsRoutes);
   router.use('/volunteering-events', volunteeringEventsRoutes);

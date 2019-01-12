@@ -9,8 +9,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  phoneNumber: {
+  sub_id: {
     type: String,
+    unique: true,
     required: true,
   }
 });
