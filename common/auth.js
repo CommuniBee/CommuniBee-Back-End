@@ -1,4 +1,6 @@
 const jwt = require('koa-jwt');
+const koaJwtSecret = require('jwks-rsa');
+const ms = require('ms');
 // var jwt = require('jsonwebtoken');
 const USER_ROLE = 'user';
 const FRC_TEAM_ROLE = 'frc_team';
@@ -43,25 +45,14 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
 
 module.exports = {
   authenticate: jwt({
-    secret: process.env.AUTH0_SECRET
+    secret: koaJwtSecret.koaJwtSecret({
+      jwksUri: process.env.AUTH0_JWKS,
+      cache: true,
+      cacheMaxEntries: 5,
+      cacheMaxAge: ms('10h')
+    }),
+    algorithms: [ 'RS256' ]
   }),
-
-  // authenticate: ctx => {
-  //   var jwksClient = require('jwks-rsa');
-  //   var client = jwksClient({
-  //     jwksUri: 'https://sandrino.auth0.com/.well-known/jwks.json'
-  //   });
-  //   function getKey(header, callback){
-  //     client.getSigningKey(header.kid, function(err, key) {
-  //       var signingKey = key.publicKey || key.rsaPublicKey;
-  //       callback(null, signingKey);
-  //     });
-  //   }
-  //
-  //   jwt.verify(token, getKey, options, function(err, decoded) {
-  //     console.log(decoded.foo) // bar
-  //   });
-  // },
 
   validateUserPermissions: validateRolePermissions(USER_ROLE),
   validateFRCTeamPermissions: validateRolePermissions(FRC_TEAM_ROLE),
