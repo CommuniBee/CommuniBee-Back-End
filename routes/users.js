@@ -13,11 +13,8 @@ router
   .post('/', DBMethods.create(User))
 
   .use(auth.authenticate)
-  .get('/subscriber/:id', ctx => {
-    logger.info(ctx.state.user);
-    logger.info(ctx.params.id);
-    logger.info(ctx.params.id === ctx.state.user.sub);
-    DBMethods.find(User, {sub_id: ctx.params.id})(ctx);
+  .get('/subscriber/me', async ctx => {
+      await DBMethods.findOne(User, {sub_id: ctx.state.user.sub})(ctx);
   })
 
   .put('/:id', DBMethods.update(User))

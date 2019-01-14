@@ -121,6 +121,17 @@ function find(Model, query) {
   };
 }
 
+function findOne(Model, query) {
+  return async (ctx) => {
+    try {
+      const doc = await Model.findOne(query);
+      handleDocResponse(ctx, doc);
+    } catch (error) {
+      handleErrors(ctx, error);
+    }
+  };
+}
+
 function create(Model) {
   return async (ctx) => {
     const requestedDoc = new Model(ctx.request.body);
@@ -162,6 +173,7 @@ function remove(Model) {
 
 module.exports = {
   find,
+  findOne,
   list,
   getById,
   create,
