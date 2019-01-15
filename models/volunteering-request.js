@@ -6,10 +6,17 @@ const volunteeringRequestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  address: {
+    type: String,
+    required: true,
+  },
   numberOfOccurrences: {
     type: Number,
     required: true,
   },
+  about: {
+    type: String
+  }
 });
 
 module.exports = VolunteeringRequestOfferBase.discriminator('VolunteeringRequest', volunteeringRequestSchema);
