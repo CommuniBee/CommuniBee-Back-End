@@ -9,7 +9,7 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
   },
   numberOfVolunteers: {
     type: Number,
-    required: true,
+    default: 1,
   },
   contact: {
     name: {
@@ -25,23 +25,9 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
       required: true,
     },
   },
-  dateRange: {
-    type: {
-      from: Date,
-      to: Date,
-    },
-    required: true,
-  },
   availableWeekdays: {
     type: [Number],
     required: true,
-  },
-  timeRange: {
-    type: {
-      from: Date,
-      to: Date,
-    },
-    required: false,
   },
   notes: {
     type: [String],

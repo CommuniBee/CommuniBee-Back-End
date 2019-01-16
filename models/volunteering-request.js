@@ -6,16 +6,16 @@ const volunteeringRequestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
-  },
   numberOfOccurrences: {
     type: Number,
-    required: true,
+    default: 1,
   },
   about: {
     type: String
+  },
+  region: {
+    type: String,
+    required: true,
   }
 });
 
