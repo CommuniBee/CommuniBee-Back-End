@@ -15,9 +15,15 @@ process
 const port = process.env.PORT || 3000;
 server.listen(port, () => logger.info(`API server started on ${port}`));
 
+const mongo_connection_options = {
+  keepAlive: 300000,
+  connectTimeoutMS: 30000,
+  useNewUrlParser: true
+};
+
 // Database connection
 mongoose.connection.on('error', error => logger.error('MongoDB connection error:', error));
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI, mongo_connection_options);
 mongoose.set('useFindAndModify', false);
 if (process.env.NODE_ENV === 'development') {
   mongoose.set('debug', (coll, method, query, doc, options) => {
