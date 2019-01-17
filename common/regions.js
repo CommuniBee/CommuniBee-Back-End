@@ -8,4 +8,4 @@ const REGIONS = [
 ];
 
 // Returns a copy of the regions array
-module.exports.getRegions = REGIONS.slice;
+module.exports.all = REGIONS;
