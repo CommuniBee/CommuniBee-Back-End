@@ -3,10 +3,14 @@ const regions = require('../common/regions');
 const VolunteeringRequestOfferBase = require('./volunteering-request-offer-base');
 
 const volunteeringOfferSchema = new mongoose.Schema({
-  location: {
+  regions: {
     type: [String],
     required: true,
   },
+  availableContent: {
+    type: [mongoose.Schema.Types.ObjectId],
+    default: []
+  }
 });
 
 module.exports = VolunteeringRequestOfferBase.discriminator('VolunteeringOffer', volunteeringOfferSchema);
