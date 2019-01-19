@@ -8,8 +8,8 @@ const volunteeringOfferSchema = new mongoose.Schema({
     required: true,
   },
   availableContent: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: []
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Content',
   }
 });
 
