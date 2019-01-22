@@ -2,7 +2,6 @@ const Router = require('koa-router');
 const User = require('../models/user');
 const DBMethods = require('./base-db-methods');
 const auth = require('../common/auth');
-const logger = require('../common/logger');
 
 const router = new Router();
 
@@ -13,8 +12,8 @@ router
   .post('/', DBMethods.create(User))
 
   .use(auth.authenticate)
-  .get('/subscriber/me', async ctx => {
-      await DBMethods.findOne(User, {sub_id: ctx.state.user.sub})(ctx);
+  .get('/subscriber/me', async (ctx) => {
+    await DBMethods.findOne(User, { sub_id: ctx.state.user.sub })(ctx);
   })
 
   .put('/:id', DBMethods.update(User))

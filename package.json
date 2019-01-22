@@ -19,7 +19,7 @@
     "dev": "cross-env NODE_ENV=development nodemon index",
     "start": "cross-env NODE_ENV=production node index",
     "lint": "node_modules/.bin/eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "node_modules/.bin/eslint --fix ."
   },
   "dependencies": {
     "@koa/cors": "^2.2.2",

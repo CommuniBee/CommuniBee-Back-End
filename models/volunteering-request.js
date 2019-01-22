@@ -11,12 +11,12 @@ const volunteeringRequestSchema = new mongoose.Schema({
     default: 1,
   },
   about: {
-    type: String
+    type: String,
   },
   region: {
     type: String,
     required: true,
-  }
+  },
 });
 
 module.exports = VolunteeringRequestOfferBase.discriminator('VolunteeringRequest', volunteeringRequestSchema);

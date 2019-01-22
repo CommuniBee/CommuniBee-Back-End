@@ -1,7 +1,7 @@
 const jwt = require('koa-jwt');
 const koaJwtSecret = require('jwks-rsa');
 const ms = require('ms');
-// var jwt = require('jsonwebtoken');
+
 const USER_ROLE = 'user';
 const FRC_TEAM_ROLE = 'frc_team';
 const BUMBLEB_ROLE = 'bumbleb';
@@ -49,9 +49,9 @@ module.exports = {
       jwksUri: process.env.AUTH0_JWKS,
       cache: true,
       cacheMaxEntries: 5,
-      cacheMaxAge: ms('10h')
+      cacheMaxAge: ms('10h'),
     }),
-    algorithms: [ 'RS256' ]
+    algorithms: ['RS256'],
   }),
 
   validateUserPermissions: validateRolePermissions(USER_ROLE),
