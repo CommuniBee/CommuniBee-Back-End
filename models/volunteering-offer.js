@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
-const regions = require('../common/regions');
 const VolunteeringRequestOfferBase = require('./volunteering-request-offer-base');
 
 const volunteeringOfferSchema = new mongoose.Schema({
-  location: {
-    type: String,
-    enum: regions.getRegions(),
+  regions: {
+    type: [String],
     required: true,
+  },
+  availableContent: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Content',
   },
 });
 

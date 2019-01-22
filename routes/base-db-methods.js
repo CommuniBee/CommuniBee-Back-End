@@ -110,6 +110,28 @@ function getById(Model) {
   };
 }
 
+function find(Model, query) {
+  return async (ctx) => {
+    try {
+      const docs = await Model.find(query);
+      handleDocResponse(ctx, docs);
+    } catch (error) {
+      handleErrors(ctx, error);
+    }
+  };
+}
+
+function findOne(Model, query) {
+  return async (ctx) => {
+    try {
+      const doc = await Model.findOne(query);
+      handleDocResponse(ctx, doc);
+    } catch (error) {
+      handleErrors(ctx, error);
+    }
+  };
+}
+
 function create(Model) {
   return async (ctx) => {
     const requestedDoc = new Model(ctx.request.body);
@@ -150,6 +172,8 @@ function remove(Model) {
 }
 
 module.exports = {
+  find,
+  findOne,
   list,
   getById,
   create,

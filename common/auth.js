@@ -1,4 +1,6 @@
 const jwt = require('koa-jwt');
+const koaJwtSecret = require('jwks-rsa');
+const ms = require('ms');
 
 const USER_ROLE = 'user';
 const FRC_TEAM_ROLE = 'frc_team';
@@ -43,9 +45,13 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
 
 module.exports = {
   authenticate: jwt({
-    secret: process.env.AUTH0_SECRET,
-    audience: process.env.AUTH0_AUDIENCE,
-    issuer: process.env.AUTH0_ISSUER,
+    secret: koaJwtSecret.koaJwtSecret({
+      jwksUri: process.env.AUTH0_JWKS,
+      cache: true,
+      cacheMaxEntries: 5,
+      cacheMaxAge: ms('10h'),
+    }),
+    algorithms: ['RS256'],
   }),
 
   validateUserPermissions: validateRolePermissions(USER_ROLE),

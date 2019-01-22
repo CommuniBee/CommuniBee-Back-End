@@ -8,6 +8,13 @@ const volunteeringRequestSchema = new mongoose.Schema({
   },
   numberOfOccurrences: {
     type: Number,
+    default: 1,
+  },
+  about: {
+    type: String,
+  },
+  region: {
+    type: String,
     required: true,
   },
 });

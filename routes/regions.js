@@ -4,7 +4,7 @@ const regions = require('../common/regions');
 const router = new Router();
 
 router.get('/', (ctx) => {
-  ctx.ok(regions.getRegions());
+  ctx.ok(regions.all);
 });
 
 module.exports = router.routes();
