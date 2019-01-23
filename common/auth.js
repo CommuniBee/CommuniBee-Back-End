@@ -2,6 +2,7 @@ const jwt = require('koa-jwt');
 const koaJwtSecret = require('jwks-rsa');
 const ms = require('ms');
 const auth0 = require('auth0');
+const compose = require('koa-compose');
 
 const USER_ROLE = 'user';
 const FRC_TEAM_ROLE = 'frc_team';
@@ -20,23 +21,15 @@ const management = new auth0.ManagementClient({
   scope: 'read:users',
 });
 
+const injectCreatedByUserId = (ctx, next) => {
+  ctx.request.body.createdByUserId = ctx.state.user.sub;
+  return next();
+};
+
 const addRoleToUser = async (ctx, next) => {
-  console.log('addRoleToUser');
-
-  /* await management.getUser({ id: ctx.state.user.sub }, async (err, user) => {
-    console.log(ctx.state.user);
-    console.log('user:');
-    console.log(user);
-    console.log('err:');
-    console.log(err);
-
-    ctx.state.user.role = user.app_metadata.role;
-    await next();
-  }); */
-
   const user = await management.getUser({ id: ctx.state.user.sub });
   ctx.state.user.role = user.app_metadata.role;
-  next();
+  return next();
 };
 
 const hasRolePermissions = (role => (async (ctx) => {
@@ -47,12 +40,12 @@ const hasRolePermissions = (role => (async (ctx) => {
   return ROLES.indexOf(ctx.state.user.role) >= ROLES.indexOf(role);
 }));
 
-const validateRolePermissions = (role => ((ctx, next) => {
-  if (hasRolePermissions(role)(ctx)) {
-    next();
-  } else {
-    ctx.unauthorized();
+const validateRolePermissions = (role => (async (ctx, next) => {
+  if (await hasRolePermissions(role)(ctx)) {
+    return next();
   }
+
+  return ctx.unauthorized();
 }));
 
 const modificationIsAllowed = (Model => (async (ctx, next) => {
@@ -70,21 +63,18 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
   }
 }));
 
-const injectCreatedByUserId = async (ctx, next) => {
-  ctx.request.body.createdByUserId = ctx.state.user.user_id;
-  await next();
-};
+const jwtAuthMiddleware = jwt({
+  secret: koaJwtSecret.koaJwtSecret({
+    jwksUri: process.env.AUTH0_JWKS,
+    cache: true,
+    cacheMaxEntries: 5,
+    cacheMaxAge: ms('10h'),
+  }),
+  algorithms: ['RS256'],
+});
 
 module.exports = {
-  authenticate: jwt({
-    secret: koaJwtSecret.koaJwtSecret({
-      jwksUri: process.env.AUTH0_JWKS,
-      cache: true,
-      cacheMaxEntries: 5,
-      cacheMaxAge: ms('10h'),
-    }),
-    algorithms: ['RS256'],
-  }),
+  authenticate: compose([jwtAuthMiddleware, addRoleToUser]),
 
   validateUserPermissions: validateRolePermissions(USER_ROLE),
   validateFRCTeamPermissions: validateRolePermissions(FRC_TEAM_ROLE),
@@ -96,5 +86,4 @@ module.exports = {
 
   modificationIsAllowed,
   injectCreatedByUserId,
-  addRoleToUser,
 };
