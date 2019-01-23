@@ -43,6 +43,11 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
   }
 }));
 
+const injectCreatedByUserId = async (ctx, next) => {
+  ctx.request.body.createdByUserId = ctx.state.user.user_id;
+  await next();
+};
+
 module.exports = {
   authenticate: jwt({
     secret: koaJwtSecret.koaJwtSecret({
@@ -63,4 +68,5 @@ module.exports = {
   hasBumbleBPermissions: hasRolePermissions(BUMBLEB_ROLE),
 
   modificationIsAllowed,
+  injectCreatedByUserId,
 };
