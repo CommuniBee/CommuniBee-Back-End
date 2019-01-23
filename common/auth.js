@@ -1,6 +1,7 @@
 const jwt = require('koa-jwt');
 const koaJwtSecret = require('jwks-rsa');
 const ms = require('ms');
+const auth0 = require('auth0');
 
 const USER_ROLE = 'user';
 const FRC_TEAM_ROLE = 'frc_team';
@@ -12,7 +13,33 @@ const BUMBLEB_ROLE = 'bumbleb';
 */
 const ROLES = [USER_ROLE, FRC_TEAM_ROLE, BUMBLEB_ROLE];
 
-const hasRolePermissions = (role => ((ctx) => {
+const management = new auth0.ManagementClient({
+  domain: process.env.AUTH0_DOMAIN,
+  clientId: process.env.AUTH0_MGMT_ID,
+  clientSecret: process.env.AUTH0_MGMT_SECRET,
+  scope: 'read:users',
+});
+
+const addRoleToUser = async (ctx, next) => {
+  console.log('addRoleToUser');
+
+  /* await management.getUser({ id: ctx.state.user.sub }, async (err, user) => {
+    console.log(ctx.state.user);
+    console.log('user:');
+    console.log(user);
+    console.log('err:');
+    console.log(err);
+
+    ctx.state.user.role = user.app_metadata.role;
+    await next();
+  }); */
+
+  const user = await management.getUser({ id: ctx.state.user.sub });
+  ctx.state.user.role = user.app_metadata.role;
+  next();
+};
+
+const hasRolePermissions = (role => (async (ctx) => {
   if (!ctx.state.user || !ctx.state.user.role) {
     return false;
   }
@@ -24,6 +51,9 @@ const validateRolePermissions = (role => ((ctx, next) => {
   if (hasRolePermissions(role)(ctx)) {
     next();
   } else {
+    console.log('unauthorized on validateRolePermissions');
+    console.log(ctx.state.user);
+    console.log(ctx.state);
     ctx.unauthorized();
   }
 }));
@@ -38,6 +68,7 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
     } else if (doc.createdByUserId === ctx.state.user.user_id) {
       next();
     } else {
+      console.log('unauthorized on modificationIsAllowed');
       ctx.unauthorized();
     }
   }
@@ -63,4 +94,5 @@ module.exports = {
   hasBumbleBPermissions: hasRolePermissions(BUMBLEB_ROLE),
 
   modificationIsAllowed,
+  addRoleToUser,
 };

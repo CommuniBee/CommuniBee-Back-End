@@ -27,6 +27,7 @@ router.get('/', DBMethods.list(VolunteeringEvent))
   .get('/:id/offer', getRequestOrOffer('offer'))
 
   .use(auth.authenticate)
+  .use(auth.addRoleToUser)
   .use(auth.validateFRCTeamPermissions)
   .post('/', DBMethods.create(VolunteeringEvent))
   .put('/:id', DBMethods.update(VolunteeringEvent))
