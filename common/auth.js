@@ -51,9 +51,6 @@ const validateRolePermissions = (role => ((ctx, next) => {
   if (hasRolePermissions(role)(ctx)) {
     next();
   } else {
-    console.log('unauthorized on validateRolePermissions');
-    console.log(ctx.state.user);
-    console.log(ctx.state);
     ctx.unauthorized();
   }
 }));
@@ -68,11 +65,15 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
     } else if (doc.createdByUserId === ctx.state.user.user_id) {
       next();
     } else {
-      console.log('unauthorized on modificationIsAllowed');
       ctx.unauthorized();
     }
   }
 }));
+
+const injectCreatedByUserId = async (ctx, next) => {
+  ctx.request.body.createdByUserId = ctx.state.user.user_id;
+  await next();
+};
 
 module.exports = {
   authenticate: jwt({
@@ -94,5 +95,6 @@ module.exports = {
   hasBumbleBPermissions: hasRolePermissions(BUMBLEB_ROLE),
 
   modificationIsAllowed,
+  injectCreatedByUserId,
   addRoleToUser,
 };
