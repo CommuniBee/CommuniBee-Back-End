@@ -13,6 +13,11 @@ const contentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  information: {
+    type: String,
+    required: false,
+    default: '',
+  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
