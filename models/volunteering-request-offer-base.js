@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
-
 const options = { discriminatorKey: 'kind' };
 const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
   title: {
@@ -35,8 +33,7 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
     default: [],
   },
   createdByUserId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true,
   },
 }, options);
