@@ -28,7 +28,7 @@ router.get('/', DBMethods.list(VolunteeringEvent))
 
   .use(auth.authenticate)
   .use(auth.validateFRCTeamPermissions)
-  .post('/', DBMethods.create(VolunteeringEvent))
+  .post('/', auth.injectCreatedByUserId, DBMethods.create(VolunteeringEvent))
   .put('/:id', DBMethods.update(VolunteeringEvent))
   .delete('/:id', DBMethods.remove(VolunteeringEvent));
 

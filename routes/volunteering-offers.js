@@ -9,7 +9,7 @@ router.get('/', DBMethods.list(VolunteeringOffer))
   .get('/:id', DBMethods.getById(VolunteeringOffer))
 
   .use(auth.authenticate)
-  .post('/', DBMethods.create(VolunteeringOffer))
+  .post('/', auth.injectCreatedByUserId, DBMethods.create(VolunteeringOffer))
 
   .use(auth.modificationIsAllowed)
   .put('/:id', DBMethods.update(VolunteeringOffer))

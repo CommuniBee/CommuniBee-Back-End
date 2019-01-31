@@ -135,7 +135,6 @@ function findOne(Model, query) {
 function create(Model) {
   return async (ctx) => {
     const requestedDoc = new Model(ctx.request.body);
-
     try {
       const savedDoc = await requestedDoc.save({
         validateBeforeSave: true,
