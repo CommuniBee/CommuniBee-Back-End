@@ -2,13 +2,9 @@ const mongoose = require('mongoose');
 const VolunteeringRequestOfferBase = require('./volunteering-request-offer-base');
 
 const volunteeringOfferSchema = new mongoose.Schema({
-  regions: {
-    type: [String],
-    required: true,
-  },
-  availableContent: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Content',
+  numberOfVolunteers: {
+    type: Number,
+    default: 1,
   },
 });
 

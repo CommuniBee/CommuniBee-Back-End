@@ -6,10 +6,6 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  numberOfVolunteers: {
-    type: Number,
-    default: 1,
-  },
   contact: {
     name: {
       type: String,
@@ -24,13 +20,17 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
       required: true,
     },
   },
-  availableWeekdays: {
-    type: [Number],
+  multiOccurrence: {
+    type: Boolean,
     required: true,
   },
-  notes: {
+  content: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Content',
+  },
+  regions: {
     type: [String],
-    default: [],
+    required: true,
   },
   createdByUserId: {
     type: String,
