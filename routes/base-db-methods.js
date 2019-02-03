@@ -88,7 +88,7 @@ function list(Model) {
         queryFilter = processDatesRangeParameters(ctx);
       }
       try {
-        const docs = await Model.find(queryFilter, null, options);
+        const docs = await Model.find(queryFilter, ctx.query.fields, options);
         ctx.ok(docs);
       } catch (error) {
         handleErrors(ctx, error);
