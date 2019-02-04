@@ -8,7 +8,7 @@ const router = new Router();
 
 const getContents = async (ctx) => {
   try {
-    const requestedField = await Content.find().select('fileName title tags category information')
+    const requestedField = await Content.find().select('fileName title tags category information organization contact')
       .populate({
         path: 'category',
         model: Category,
