@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const Content = require('../models/content');
 const DBMethods = require('./base-db-methods');
-const Category = require('../models/category');
+const Category = require('../models/category').default;
 const auth = require('../common/auth');
 
 const router = new Router();

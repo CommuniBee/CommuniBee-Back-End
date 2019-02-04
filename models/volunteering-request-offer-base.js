@@ -1,8 +1,8 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
 const options = { discriminatorKey: 'kind' };
-const VolunteeringRequestOfferBaseSchema = new Schema({
-  title: {
+const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
+  organization: {
     type: String,
     required: true,
   },
@@ -38,4 +38,4 @@ const VolunteeringRequestOfferBaseSchema = new Schema({
   },
 }, options);
 
-module.exports = model('VolunteeringRequestOfferBase', VolunteeringRequestOfferBaseSchema);
+module.exports = mongoose.model('VolunteeringRequestOfferBase', VolunteeringRequestOfferBaseSchema);
