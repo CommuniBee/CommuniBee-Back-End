@@ -1,14 +1,10 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
 const options = { discriminatorKey: 'kind' };
-const VolunteeringRequestOfferBaseSchema = new Schema({
-  title: {
+const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
+  organization: {
     type: String,
     required: true,
-  },
-  numberOfVolunteers: {
-    type: Number,
-    default: 1,
   },
   contact: {
     name: {
@@ -24,13 +20,22 @@ const VolunteeringRequestOfferBaseSchema = new Schema({
       required: true,
     },
   },
-  availableWeekdays: {
-    type: [Number],
+  multiOccurrence: {
+    type: Boolean,
     required: true,
   },
-  notes: {
-    type: [String],
-    default: [],
+  content: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Content',
+  },
+  regions: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SubRegion',
+      },
+    ],
+    required: true,
   },
   createdByUserId: {
     type: String,
@@ -38,4 +43,4 @@ const VolunteeringRequestOfferBaseSchema = new Schema({
   },
 }, options);
 
-module.exports = model('VolunteeringRequestOfferBase', VolunteeringRequestOfferBaseSchema);
+module.exports = mongoose.model('VolunteeringRequestOfferBase', VolunteeringRequestOfferBaseSchema);
