@@ -2,13 +2,12 @@ const mongoose = require('mongoose');
 const VolunteeringRequestOfferBase = require('./volunteering-request-offer-base');
 
 const volunteeringRequestSchema = new mongoose.Schema({
-  location: {
+  title: {
     type: String,
     required: true,
   },
-  numberOfOccurrences: {
-    type: Number,
-    required: true,
+  about: {
+    type: String,
   },
 });
 

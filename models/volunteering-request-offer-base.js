@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const options = { discriminatorKey: 'kind' };
 const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
-  numberOfVolunteers: {
-    type: Number,
+  organization: {
+    type: String,
     required: true,
   },
   contact: {
@@ -20,27 +20,22 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
       required: true,
     },
   },
-  dateRange: {
-    type: {
-      from: Date,
-      to: Date,
-    },
+  multiOccurrence: {
+    type: Boolean,
     required: true,
   },
-  availableWeekdays: {
-    type: [Number],
-    required: true,
+  content: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Content',
   },
-  timeRange: {
-    type: {
-      from: Date,
-      to: Date,
-    },
+  regions: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SubRegion',
+      },
+    ],
     required: true,
-  },
-  notes: {
-    type: [String],
-    default: [],
   },
   createdByUserId: {
     type: String,

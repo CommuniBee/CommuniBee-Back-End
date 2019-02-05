@@ -17,10 +17,6 @@ const volunteeringEventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  files: {
-    type: [String],
-    default: [],
-  },
 });
 
 module.exports = mongoose.model('VolunteeringEvent', volunteeringEventSchema);

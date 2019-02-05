@@ -1,4 +1,8 @@
 const jwt = require('koa-jwt');
+const koaJwtSecret = require('jwks-rsa');
+const ms = require('ms');
+const auth0 = require('auth0');
+const compose = require('koa-compose');
 
 const USER_ROLE = 'user';
 const FRC_TEAM_ROLE = 'frc_team';
@@ -10,7 +14,25 @@ const BUMBLEB_ROLE = 'bumbleb';
 */
 const ROLES = [USER_ROLE, FRC_TEAM_ROLE, BUMBLEB_ROLE];
 
-const hasRolePermissions = (role => ((ctx) => {
+const management = new auth0.ManagementClient({
+  domain: process.env.AUTH0_DOMAIN,
+  clientId: process.env.AUTH0_MGMT_ID,
+  clientSecret: process.env.AUTH0_MGMT_SECRET,
+  scope: 'read:users',
+});
+
+const injectCreatedByUserId = (ctx, next) => {
+  ctx.request.body.createdByUserId = ctx.state.user.sub;
+  return next();
+};
+
+const addRoleToUser = async (ctx, next) => {
+  const user = await management.getUser({ id: ctx.state.user.sub });
+  ctx.state.user.role = user.app_metadata.role;
+  return next();
+};
+
+const hasRolePermissions = (role => (async (ctx) => {
   if (!ctx.state.user || !ctx.state.user.role) {
     return false;
   }
@@ -18,12 +40,12 @@ const hasRolePermissions = (role => ((ctx) => {
   return ROLES.indexOf(ctx.state.user.role) >= ROLES.indexOf(role);
 }));
 
-const validateRolePermissions = (role => ((ctx, next) => {
-  if (hasRolePermissions(role)(ctx)) {
-    next();
-  } else {
-    ctx.unauthorized();
+const validateRolePermissions = (role => (async (ctx, next) => {
+  if (await hasRolePermissions(role)(ctx)) {
+    return next();
   }
+
+  return ctx.unauthorized();
 }));
 
 const modificationIsAllowed = (Model => (async (ctx, next) => {
@@ -41,12 +63,18 @@ const modificationIsAllowed = (Model => (async (ctx, next) => {
   }
 }));
 
-module.exports = {
-  authenticate: jwt({
-    secret: process.env.AUTH0_SECRET,
-    audience: process.env.AUTH0_AUDIENCE,
-    issuer: process.env.AUTH0_ISSUER,
+const jwtAuthMiddleware = jwt({
+  secret: koaJwtSecret.koaJwtSecret({
+    jwksUri: process.env.AUTH0_JWKS,
+    cache: true,
+    cacheMaxEntries: 5,
+    cacheMaxAge: ms('10h'),
   }),
+  algorithms: ['RS256'],
+});
+
+module.exports = {
+  authenticate: compose([jwtAuthMiddleware, addRoleToUser]),
 
   validateUserPermissions: validateRolePermissions(USER_ROLE),
   validateFRCTeamPermissions: validateRolePermissions(FRC_TEAM_ROLE),
@@ -57,4 +85,5 @@ module.exports = {
   hasBumbleBPermissions: hasRolePermissions(BUMBLEB_ROLE),
 
   modificationIsAllowed,
+  injectCreatedByUserId,
 };

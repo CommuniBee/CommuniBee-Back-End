@@ -1,23 +1,40 @@
 const mongoose = require('mongoose');
 
 const contentSchema = new mongoose.Schema({
-  files: {
-    type: [{
-      name: {
-        type: String,
-        required: true,
-      },
-      buffer: {
-        type: mongoose.Schema.Types.Buffer,
-        required: true,
-      },
-    }],
+  organization: {
+    type: String,
     required: true,
-    validate: [(array => array.length > 0), 'Files list must not be empty'],
+  },
+  contact: {
+    name: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+  },
+  file: {
+    type: String,
+    required: true,
+  },
+  fileName: {
+    type: String,
+    required: true,
   },
   title: {
     type: String,
     required: true,
+  },
+  information: {
+    type: String,
+    required: false,
+    default: '',
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,

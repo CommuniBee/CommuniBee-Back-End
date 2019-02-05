@@ -88,7 +88,7 @@ function list(Model) {
         queryFilter = processDatesRangeParameters(ctx);
       }
       try {
-        const docs = await Model.find(queryFilter, null, options);
+        const docs = await Model.find(queryFilter, ctx.query.fields, options);
         ctx.ok(docs);
       } catch (error) {
         handleErrors(ctx, error);
@@ -110,10 +110,31 @@ function getById(Model) {
   };
 }
 
+function find(Model, query) {
+  return async (ctx) => {
+    try {
+      const docs = await Model.find(query);
+      handleDocResponse(ctx, docs);
+    } catch (error) {
+      handleErrors(ctx, error);
+    }
+  };
+}
+
+function findOne(Model, query) {
+  return async (ctx) => {
+    try {
+      const doc = await Model.findOne(query);
+      handleDocResponse(ctx, doc);
+    } catch (error) {
+      handleErrors(ctx, error);
+    }
+  };
+}
+
 function create(Model) {
   return async (ctx) => {
     const requestedDoc = new Model(ctx.request.body);
-
     try {
       const savedDoc = await requestedDoc.save({
         validateBeforeSave: true,
@@ -150,6 +171,8 @@ function remove(Model) {
 }
 
 module.exports = {
+  find,
+  findOne,
   list,
   getById,
   create,
