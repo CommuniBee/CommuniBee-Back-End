@@ -29,8 +29,12 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
     ref: 'Content',
   },
   regions: {
-    type: [{type: mongoose.Schema.Types.ObjectId,
-        ref: 'SubRegion'}],
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SubRegion',
+      },
+    ],
     required: true,
   },
   createdByUserId: {
