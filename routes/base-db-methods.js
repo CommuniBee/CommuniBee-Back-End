@@ -75,7 +75,7 @@ function processPaginationParameters(ctx) {
   };
 }
 
-function list(Model) {
+function list(Model, populates = []) {
   return async (ctx) => {
     const allowedToFetchAll = auth.hasFRCTeamPermissions(ctx);
 
@@ -88,8 +88,11 @@ function list(Model) {
         queryFilter = processDatesRangeParameters(ctx);
       }
       try {
-        const docs = await Model.find(queryFilter, ctx.query.fields, options);
-        ctx.ok(docs);
+        let docs = Model.find(queryFilter, ctx.query.fields, options);
+        for (const populate of populates) {
+          docs = docs.populate(populate);
+        }
+        ctx.ok(await docs);
       } catch (error) {
         handleErrors(ctx, error);
       }
@@ -150,8 +153,8 @@ function update(Model) {
   return async (ctx) => {
     try {
       const updatedDoc = await Model.findByIdAndUpdate(ctx.params.id,
-        { $set: ctx.request.body },
-        { new: true });
+        {$set: ctx.request.body},
+        {new: true});
       handleDocResponse(ctx, updatedDoc);
     } catch (error) {
       handleErrors(ctx, error);
