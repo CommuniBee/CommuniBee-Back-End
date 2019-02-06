@@ -3,9 +3,10 @@ const VolunteeringRequest = require('../models/volunteering-request');
 const DBMethods = require('./base-db-methods');
 const auth = require('../common/auth');
 
+const populates = [{ path: 'content', select: 'title' }];
 const router = new Router();
 
-router.get('/', DBMethods.list(VolunteeringRequest))
+router.get('/', DBMethods.list(VolunteeringRequest, populates))
   .get('/:id', DBMethods.getById(VolunteeringRequest))
 
   .use(auth.authenticate)
