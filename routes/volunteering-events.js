@@ -21,7 +21,7 @@ function getRequestOrOffer(fieldName) {
   };
 }
 
-router.get('/', DBMethods.list(VolunteeringEvent))
+router.get('/', DBMethods.list(VolunteeringEvent, [{ path: 'offer', model: VolunteeringRequestOfferBaseModel }, { path: 'request', model: VolunteeringRequestOfferBaseModel }]))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
   .get('/:id/request', getRequestOrOffer('request'))
   .get('/:id/offer', getRequestOrOffer('offer'))
