@@ -89,9 +89,9 @@ function list(Model, populates = []) {
       }
       try {
         let docs = Model.find(queryFilter, ctx.query.fields, options);
-        for (const populate of populates) {
+        populates.forEach((populate) => {
           docs = docs.populate(populate);
-        }
+        });
         ctx.ok(await docs);
       } catch (error) {
         handleErrors(ctx, error);
@@ -153,8 +153,8 @@ function update(Model) {
   return async (ctx) => {
     try {
       const updatedDoc = await Model.findByIdAndUpdate(ctx.params.id,
-        {$set: ctx.request.body},
-        {new: true});
+        { $set: ctx.request.body },
+        { new: true });
       handleDocResponse(ctx, updatedDoc);
     } catch (error) {
       handleErrors(ctx, error);
