@@ -5,6 +5,7 @@ const auth = require('../common/auth');
 const Content = require('../models/content');
 const SubRegion = require('../models/content');
 
+const populates = [{ path: 'content', select: 'title' }];
 const router = new Router();
 
 const getVolunteeringRequest = async (ctx) => {
@@ -30,7 +31,8 @@ function setMatch(isMatch) {
   };
 }
 
-router.get('/', getVolunteeringRequest)
+router.get('/', DBMethods.list(VolunteeringRequest, populates))
+  .get('/unmatched', getVolunteeringRequest)
   .get('/:id', DBMethods.getById(VolunteeringRequest))
   .use(auth.authenticate)
   .post('/', auth.injectCreatedByUserId, DBMethods.create(VolunteeringRequest))
