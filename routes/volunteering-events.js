@@ -5,6 +5,8 @@ const VolunteeringRequestOfferBaseModel = require('../models/volunteering-reques
 const VolunteeringOffer = require('../models/volunteering-offer');
 const VolunteeringRequest = require('../models/volunteering-request');
 const auth = require('../common/auth');
+const Content = require('../models/content');
+const SubRegion = require('../models/content');
 
 const router = new Router();
 
@@ -26,9 +28,24 @@ function getRequestOrOffer(fieldName) {
 const getPlannedEvents = async (ctx) => {
   try {
     const requestedField = await VolunteeringEvent.find({ isDone: false })
-      .populate([{ path: 'request', model: VolunteeringRequest, select: ['contact', 'about', 'organization'] },
-        { path: 'offer', model: VolunteeringOffer, select: ['contact', 'organization'] }]);
-
+      .populate([
+        {
+          path: 'request',
+          model: VolunteeringRequest,
+          populate: [
+            { path: 'content', model: Content, select: ['title'] },
+            { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
+          select: ['title', 'contact', 'about', 'content', 'regions', 'organization'],
+        },
+        {
+          path:
+          'offer',
+          model: VolunteeringOffer,
+          populate: [
+            { path: 'content', model: Content, select: ['title'] },
+            { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
+          select: ['contact', 'content', 'regions', 'organization'],
+        }]);
     DBMethods.handleDocResponse(ctx, requestedField);
   } catch (error) {
     DBMethods.handleErrors(ctx, error);
