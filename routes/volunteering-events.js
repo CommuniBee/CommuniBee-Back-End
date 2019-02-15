@@ -9,6 +9,23 @@ const Content = require('../models/content');
 const SubRegion = require('../models/content');
 
 const router = new Router();
+const poplateField = [
+  {
+    path: 'request',
+    model: VolunteeringRequest,
+    populate: [
+      { path: 'content', model: Content, select: ['title'] },
+      { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
+    select: ['title', 'contact', 'about', 'content', 'regions', 'organization'],
+  },
+  {
+    path: 'offer',
+    model: VolunteeringOffer,
+    populate: [
+      { path: 'content', model: Content, select: ['title'] },
+      { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
+    select: ['contact', 'content', 'regions', 'organization'],
+  }];
 
 function getRequestOrOffer(fieldName) {
   return async (ctx) => {
@@ -25,39 +42,10 @@ function getRequestOrOffer(fieldName) {
   };
 }
 
-const getPlannedEvents = async (ctx) => {
-  try {
-    const requestedField = await VolunteeringEvent.find({ isDone: false })
-      .populate([
-        {
-          path: 'request',
-          model: VolunteeringRequest,
-          populate: [
-            { path: 'content', model: Content, select: ['title'] },
-            { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
-          select: ['title', 'contact', 'about', 'content', 'regions', 'organization'],
-        },
-        {
-          path:
-          'offer',
-          model: VolunteeringOffer,
-          populate: [
-            { path: 'content', model: Content, select: ['title'] },
-            { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
-          select: ['contact', 'content', 'regions', 'organization'],
-        }]);
-    DBMethods.handleDocResponse(ctx, requestedField);
-  } catch (error) {
-    DBMethods.handleErrors(ctx, error);
-  }
-};
-
-router.get('/', DBMethods.list(VolunteeringEvent))
-  .get('/planned', getPlannedEvents)
+router.get('/', DBMethods.list(VolunteeringEvent, poplateField))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
   .get('/:id/request', getRequestOrOffer('request'))
   .get('/:id/offer', getRequestOrOffer('offer'))
-
   .use(auth.authenticate)
   .use(auth.validateFRCTeamPermissions)
   .post('/', auth.injectCreatedByUserId, DBMethods.create(VolunteeringEvent))
