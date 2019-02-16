@@ -9,7 +9,7 @@ const Content = require('../models/content');
 const SubRegion = require('../models/content');
 
 const router = new Router();
-const poplateField = [
+const populateField = [
   {
     path: 'request',
     model: VolunteeringRequest,
@@ -42,7 +42,7 @@ function getRequestOrOffer(fieldName) {
   };
 }
 
-router.get('/', DBMethods.list(VolunteeringEvent, poplateField))
+router.get('/', DBMethods.list(VolunteeringEvent, populateField))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
   .get('/:id/request', getRequestOrOffer('request'))
   .get('/:id/offer', getRequestOrOffer('offer'))
