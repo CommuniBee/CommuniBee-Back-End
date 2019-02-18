@@ -14,18 +14,18 @@ const populateField = [
     path: 'request',
     model: VolunteeringRequest,
     populate: [
-      {path: 'content', model: Content, select: ['title']},
-      {path: 'regions', populate: {path: 'SubRegion', model: SubRegion}}
+      { path: 'content', model: Content, select: ['title'] },
+      { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } },
     ],
-    select: ['title', 'contact', 'about', 'content', 'regions', 'organization']
+    select: ['title', 'contact', 'about', 'content', 'regions', 'organization'],
   },
   {
     path: 'offer',
     model: VolunteeringOffer,
     populate: [
-      {path: 'content', model: Content, select: ['title']},
-      {path: 'regions', populate: {path: 'SubRegion', model: SubRegion}}],
-    select: ['contact', 'content', 'regions', 'organization']
+      { path: 'content', model: Content, select: ['title'] },
+      { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
+    select: ['contact', 'content', 'regions', 'organization'],
   }];
 
 function getRequestOrOffer(fieldName) {
