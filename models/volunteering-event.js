@@ -34,7 +34,7 @@ const volunteeringEventSchema = new mongoose.Schema({
     rating: Number,
     description: String,
     createdByUserId: String,
-  }
+  },
 });
 
 module.exports = mongoose.model('VolunteeringEvent', volunteeringEventSchema);
