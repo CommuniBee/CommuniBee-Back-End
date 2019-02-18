@@ -43,14 +43,14 @@ function processDatesRangeParameters(ctx) {
       if (startDate < 1) {
         throw new RangeError('Query parameter \'startDate\' must be a positive number');
       }
-      datesFilter.date.$gte = moment(startDate).tz('Asia/Jerusalem').format();
+      datesFilter.startDate.$gte = moment(startDate).tz('Asia/Jerusalem').format();
     }
 
     if (!Number.isNaN(endDate)) {
       if (endDate < 1) {
         throw new RangeError('Query parameter \'endDate\' must be a positive number');
       }
-      datesFilter.date.$lte = moment(endDate).tz('Asia/Jerusalem').format();
+      datesFilter.endDate.$lte = moment(endDate).tz('Asia/Jerusalem').format();
     }
   }
 
@@ -75,21 +75,26 @@ function processPaginationParameters(ctx) {
   };
 }
 
-function list(Model) {
+function list(Model, populates = []) {
   return async (ctx) => {
     const allowedToFetchAll = auth.hasFRCTeamPermissions(ctx);
 
     let options = {};
-    let queryFilter = {};
+    const queryFilter = ctx.query;
+    delete queryFilter.startDate;
+    delete queryFilter.endDate;
 
     try {
       if (!allowedToFetchAll) {
         options = processPaginationParameters(ctx);
-        queryFilter = processDatesRangeParameters(ctx);
+        Object.assign(queryFilter, processDatesRangeParameters(ctx));
       }
       try {
-        const docs = await Model.find(queryFilter, ctx.query.fields, options);
-        ctx.ok(docs);
+        let docs = Model.find(queryFilter, ctx.query.fields, options);
+        populates.forEach((populate) => {
+          docs = docs.populate(populate);
+        });
+        ctx.ok(await docs);
       } catch (error) {
         handleErrors(ctx, error);
       }
