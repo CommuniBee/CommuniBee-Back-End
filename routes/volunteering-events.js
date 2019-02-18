@@ -15,7 +15,8 @@ const populateField = [
     model: VolunteeringRequest,
     populate: [
       { path: 'content', model: Content, select: ['title'] },
-      { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } }],
+      { path: 'regions', populate: { path: 'SubRegion', model: SubRegion } },
+    ],
     select: ['title', 'contact', 'about', 'content', 'regions', 'organization'],
   },
   {
@@ -46,6 +47,7 @@ router.get('/', DBMethods.list(VolunteeringEvent, populateField))
   .get('/:id', DBMethods.getById(VolunteeringEvent))
   .get('/:id/request', getRequestOrOffer('request'))
   .get('/:id/offer', getRequestOrOffer('offer'))
+
   .use(auth.authenticate)
   .use(auth.validateFRCTeamPermissions)
   .post('/', auth.injectCreatedByUserId, DBMethods.create(VolunteeringEvent))
