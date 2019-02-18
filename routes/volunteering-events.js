@@ -15,7 +15,8 @@ const populateField = [
     model: VolunteeringRequest,
     populate: [
       {path: 'content', model: Content, select: ['title']},
-      {path: 'regions', populate: {path: 'SubRegion', model: SubRegion}}],
+      {path: 'regions', populate: {path: 'SubRegion', model: SubRegion}}
+    ],
     select: ['title', 'contact', 'about', 'content', 'regions', 'organization']
   },
   {
