@@ -37,6 +37,10 @@ const VolunteeringRequestOfferBaseSchema = new mongoose.Schema({
     ],
     required: true,
   },
+  isMatched: {
+    type: Boolean,
+    default: false,
+  },
   createdByUserId: {
     type: String,
     required: true,

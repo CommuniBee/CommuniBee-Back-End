@@ -43,14 +43,14 @@ function processDatesRangeParameters(ctx) {
       if (startDate < 1) {
         throw new RangeError('Query parameter \'startDate\' must be a positive number');
       }
-      datesFilter.date.$gte = moment(startDate).tz('Asia/Jerusalem').format();
+      datesFilter.startDate.$gte = moment(startDate).tz('Asia/Jerusalem').format();
     }
 
     if (!Number.isNaN(endDate)) {
       if (endDate < 1) {
         throw new RangeError('Query parameter \'endDate\' must be a positive number');
       }
-      datesFilter.date.$lte = moment(endDate).tz('Asia/Jerusalem').format();
+      datesFilter.endDate.$lte = moment(endDate).tz('Asia/Jerusalem').format();
     }
   }
 
@@ -80,12 +80,14 @@ function list(Model, populates = []) {
     const allowedToFetchAll = auth.hasFRCTeamPermissions(ctx);
 
     let options = {};
-    let queryFilter = {};
+    const queryFilter = ctx.query;
+    delete queryFilter.startDate;
+    delete queryFilter.endDate;
 
     try {
       if (!allowedToFetchAll) {
         options = processPaginationParameters(ctx);
-        queryFilter = processDatesRangeParameters(ctx);
+        Object.assign(queryFilter, processDatesRangeParameters(ctx));
       }
       try {
         let docs = Model.find(queryFilter, ctx.query.fields, options);

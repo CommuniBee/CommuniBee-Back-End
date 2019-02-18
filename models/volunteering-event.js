@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const volunteeringEventSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
   request: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'VolunteeringRequestOfferBase',
@@ -12,6 +16,10 @@ const volunteeringEventSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
+  },
+  isDone: {
+    type: Boolean,
+    default: false,
   },
   createdByUserId: {
     type: String,
