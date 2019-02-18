@@ -49,9 +49,9 @@ router.get('/', DBMethods.list(VolunteeringEvent, populateField))
   .get('/:id/offer', getRequestOrOffer('offer'))
 
   .use(auth.authenticate)
+  .put('/:id', DBMethods.update(VolunteeringEvent))
   .use(auth.validateFRCTeamPermissions)
   .post('/', auth.injectCreatedByUserId, DBMethods.create(VolunteeringEvent))
-  .put('/:id', DBMethods.update(VolunteeringEvent))
   .delete('/:id', DBMethods.remove(VolunteeringEvent));
 
 module.exports = router.routes();
